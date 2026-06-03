@@ -1,0 +1,12 @@
+symfinity_privacy_settings:
+    categories:
+        -
+            id: required
+            label: Required
+            default_state: required
+            description: Essential services and security primitives
+        -
+            id: analytics
+            label: Analytics
+            default_state: disabled
+            description: Optional usage and performance analytics

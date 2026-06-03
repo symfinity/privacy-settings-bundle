@@ -1,0 +1,13 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  Symfinity\PrivacySettingsBundle\:
+    resource: '../src/'
+    exclude:
+      - '../src/DependencyInjection/'
+      - '../src/PrivacySettingsBundle.php'
+
+  Symfinity\PrivacySettingsBundle\Consent\PreferenceStoreInterface:
+    alias: Symfinity\PrivacySettingsBundle\Consent\InMemoryPreferenceStore
