@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Symfinity\PrivacySettingsBundle\Tests\Integration;
 
 use Symfinity\PrivacySettingsBundle\PrivacySettingsBundle;
+use Symfinity\UiKernel\UiKernelBundle;
 use Symfinity\UxBlocksCore\SymfinityUxBlocksCoreBundle;
 use Symfinity\UxBlocksForm\SymfinityUxBlocksFormBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
@@ -41,6 +42,7 @@ final class PrivacySettingsTestKernel extends Kernel
             new TwigBundle(),
             new StimulusBundle(),
             new TwigComponentBundle(),
+            new UiKernelBundle(),
             new SymfinityUxBlocksCoreBundle(),
             new SymfinityUxBlocksFormBundle(),
             new PrivacySettingsBundle(),
@@ -73,6 +75,12 @@ final class PrivacySettingsTestKernel extends Kernel
             'fragment_ids' => false,
         ]);
 
+        $container->extension('symfinity_ui_kernel', [
+            'schema_version' => '1.0',
+            'default_theme' => 'default',
+            'default_variant' => 'default',
+        ]);
+
         $container->extension('framework', [
             'secret' => 'test-secret',
             'test' => true,
@@ -101,6 +109,7 @@ final class PrivacySettingsTestKernel extends Kernel
                 ->tag('twig.runtime');
 
         $container->extension('twig_component', [
+            'anonymous_template_directory' => 'components',
             'defaults' => [
                 'Symfinity\\UxBlocksCore\\Twig\\Components\\' => 'components',
                 'Symfinity\\UxBlocksForm\\Twig\\Components\\' => 'components',

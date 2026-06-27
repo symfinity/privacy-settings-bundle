@@ -41,10 +41,10 @@ jobs:
       - name: Resolve Symfinity siblings from GitHub mirrors
         run: |
           composer config --unset repositories
-          for repo in ux-blocks-core ux-blocks-form; do
+          for repo in ux-blocks-core ux-blocks-form ui-kernel; do
             composer config "repositories.symfinity-${repo}" "{\"type\":\"vcs\",\"url\":\"https://github.com/symfinity/${repo}\"}"
           done
-          composer require --no-update 'symfinity/ux-blocks-form:dev-main'
+          composer require --no-update 'symfinity/ux-blocks-form:dev-main' 'symfinity/ui-kernel:dev-main'
 
       - name: Pin Symfony ${{ matrix.symfony }}
         run: |
@@ -58,6 +58,9 @@ jobs:
             symfony/twig-bundle:^${{ matrix.symfony }} \
             symfony/browser-kit:^${{ matrix.symfony }} \
             symfony/css-selector:^${{ matrix.symfony }} \
+            symfony/form:^${{ matrix.symfony }} \
+            symfony/security-csrf:^${{ matrix.symfony }} \
+            symfony/validator:^${{ matrix.symfony }} \
             'symfony/stimulus-bundle:^2.0|^3.0' \
             'symfony/ux-twig-component:^2.0|^3.0'
 
