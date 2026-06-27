@@ -1,7 +1,7 @@
 name: CI
 
 # Matrix: maintained PHP x maintained Symfony (floor 7.4.*).
-# Regenerated 2026-06-27 — pattern packages/ux-blocks-live/.github/workflows/ci.yml
+# Tier B — Packagist-resolvable deps only (split-public-bound-tier-b).
 
 on:
   push:
@@ -37,14 +37,6 @@ jobs:
           extensions: mbstring, xml, ctype, iconv, intl, curl
           coverage: none
           tools: composer:v2
-
-      - name: Resolve Symfinity siblings from GitHub mirrors
-        run: |
-          composer config --unset repositories
-          for repo in ux-blocks-core ux-blocks-form ui-kernel; do
-            composer config "repositories.symfinity-${repo}" "{\"type\":\"vcs\",\"url\":\"https://github.com/symfinity/${repo}\"}"
-          done
-          composer require --no-update 'symfinity/ux-blocks-form:dev-main' 'symfinity/ui-kernel:dev-main'
 
       - name: Pin Symfony ${{ matrix.symfony }}
         run: |
