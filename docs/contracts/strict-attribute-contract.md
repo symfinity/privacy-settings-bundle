@@ -1,7 +1,6 @@
 # Contract: strict privacy attribute policy
 
-Feature: `symfinity 019`  
-Package: `symfinity/privacy-settings-bundle`
+**Package:** `symfinity/privacy-settings-bundle`
 
 ## Canonical rule
 

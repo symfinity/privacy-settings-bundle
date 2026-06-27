@@ -35,10 +35,6 @@ final class PrivacyPreferenceState
                 throw PrivacySettingsException::unknownPreferenceCategory($id);
             }
 
-            if (!is_bool($enabled)) {
-                throw PrivacySettingsException::unknownCategoryState((string) $enabled);
-            }
-
             if ($byId[$id]->isRequired() && false === $enabled) {
                 throw PrivacySettingsException::requiredCategoryDisabled($id);
             }
@@ -47,6 +43,8 @@ final class PrivacyPreferenceState
 
     /**
      * @param list<PrivacyCategory> $categories
+     *
+     * @return array<string, bool>
      */
     public function toEffectiveChoices(array $categories): array
     {

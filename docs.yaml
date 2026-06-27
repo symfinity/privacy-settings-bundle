@@ -9,6 +9,7 @@ sidebar:
   - troubleshooting
   - upgrade
   - usage
+  - verification
 
 slices:
   - symfony: "7.4"
@@ -24,3 +25,4 @@ slices:
       - troubleshooting.md
       - upgrade.md
       - usage.md
+      - verification.md

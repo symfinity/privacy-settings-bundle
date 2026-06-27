@@ -1,0 +1,51 @@
+<div
+    data-privacy-consent
+    class="privacy-consent privacy-consent--{{ position }}"
+>
+    {% component Form with {
+        method: 'post',
+        action: submitUrl,
+        title: 'Privacy preferences'
+    } %}
+        {% block content %}
+            {% for category in categories %}
+                {% component Field with {
+                    label: category.label,
+                    hint: category.description,
+                    controlId: 'privacy-' ~ category.id
+                } %}
+                    {% block content %}
+                        {% if category.isRequired %}
+                            {% component Checkbox with {
+                                name: 'privacy[' ~ category.id ~ ']',
+                                value: '1',
+                                checked: true,
+                                disabled: true
+                            } %}{% endcomponent %}
+                        {% elseif choices[category.id] %}
+                            {% component Switch with {
+                                name: 'privacy[' ~ category.id ~ ']',
+                                value: '1',
+                                checked: true
+                            } %}{% endcomponent %}
+                        {% else %}
+                            {% component Switch with {
+                                name: 'privacy[' ~ category.id ~ ']',
+                                value: '1'
+                            } %}{% endcomponent %}
+                        {% endif %}
+                    {% endblock %}
+                {% endcomponent %}
+            {% endfor %}
+        {% endblock %}
+        {% block footer %}
+            {% component FormActions with { align: 'stretch' } %}
+                {% block content %}
+                    {% component Button with { variant: 'primary' } %}
+                        {% block content %}Save preferences{% endblock %}
+                    {% endcomponent %}
+                {% endblock %}
+            {% endcomponent %}
+        {% endblock %}
+    {% endcomponent %}
+</div>

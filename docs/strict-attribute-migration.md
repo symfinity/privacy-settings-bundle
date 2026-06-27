@@ -16,6 +16,12 @@ The following aliases are not tolerated and are always rejected:
 1. Replace all legacy attributes with `data-privacy-category`.
 2. Run bundle unit/integration tests to verify forbidden aliases fail.
 3. Validate host templates do not mix canonical and forbidden attributes.
+4. Review [Usage](usage.md) and [Troubleshooting](troubleshooting.md) for forbidden alias examples.
+
+## See also
+
+- [Strict attribute contract](contracts/strict-attribute-contract.md)
+- [Reference](reference.md)
 
 ## Non-goals
 

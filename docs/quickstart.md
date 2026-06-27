@@ -1,4 +1,4 @@
-# Quickstart: symfinity/privacy-settings-bundle
+# Quickstart
 
 ## Install
 
@@ -8,26 +8,70 @@ composer require symfinity/privacy-settings-bundle
 
 With Flex, the recipe registers the bundle and copies default category config.
 
-## Canonical markup
+## Configure categories
 
-```twig
-<script type="text/plain" data-privacy-category="analytics"></script>
+```yaml
+# config/packages/symfinity_privacy_settings.yaml
+symfinity_privacy_settings:
+    categories:
+        - id: required
+          label: Required
+          default_state: required
+        - id: analytics
+          label: Analytics
+          default_state: disabled
+          description: Optional usage analytics
 ```
 
-## Forbidden (strict policy)
+## Capture and restore (PHP)
 
-- `data-cookiecategory`
-- `data-cc`
+```php
+use Symfinity\PrivacySettingsBundle\Consent\PreferenceCaptureService;
+use Symfinity\PrivacySettingsBundle\Consent\PreferenceRestoreService;
+use Symfinity\PrivacySettingsBundle\Symfony\CategoryModelNormalizer;
 
-See [strict-attribute-contract](contracts/strict-attribute-contract.md).
+/** @var CategoryModelNormalizer $normalizer */
+$categories = $normalizer->normalize($this->getParameter('symfinity.privacy_settings.categories'));
 
-## Dogfood
+$restore = $this->restoreService->effectiveChoices('visitor-123', $categories);
+// ['required' => true, 'analytics' => false]
 
-`symfinity/ux-blocks-demo` — route `/privacy-settings`.
+$capture->capture('visitor-123', $categories, ['required' => true, 'analytics' => true]);
+```
 
-## Tests
+## Embed ConsentBanner (Twig)
+
+Requires `symfinity/ux-blocks-form`. Suggest `symfinity/ui-kernel` when your layout already exposes `[data-theme]` tokens.
+
+```twig
+{# templates/base.html.twig #}
+{% block body %}
+    {{ component('ConsentBanner', { subjectKey: app.session.id }) }}
+    {% block content %}{% endblock %}
+{% endblock %}
+```
+
+Import glue CSS in your layout (AssetMapper):
+
+```twig
+<link rel="stylesheet" href="{{ asset('privacy-settings-bundle/styles/privacy-settings-consent.css') }}">
+```
+
+## Mark blocked assets
+
+```twig
+<script type="text/plain" data-privacy-category="analytics" src="/assets/analytics.js"></script>
+```
+
+See [strict-attribute-contract](contracts/strict-attribute-contract.md) for forbidden aliases.
+
+## Headless use
+
+Skip rendering `ConsentBanner` and call capture/restore services directly — see [Usage](usage.md).
+
+## Maintainer tests (monorepo)
 
 ```bash
 cd src/symfinity
-./sbin/php packages/privacy-settings-bundle/vendor/bin/phpunit -c packages/privacy-settings-bundle/phpunit.xml.dist
+./bin/php vendor/bin/phpunit packages/privacy-settings-bundle/tests/
 ```

@@ -2,7 +2,11 @@
 
 ## Requirements
 
-PHP 8.2+ and Symfony 6.4.
+- PHP 8.2 or higher
+- Symfony 7.4 or 8.x
+- `symfinity/ux-blocks-form` ^0.1 (pulled transitively by this bundle)
+
+Optional: `symfinity/ui-kernel` for themed consent UI in kernel-powered apps.
 
 ## Composer
 
@@ -12,18 +16,33 @@ composer require symfinity/privacy-settings-bundle
 
 ## Symfony Flex
 
-Describe recipe output: `config/packages/`, routes, assets (if any).
+Add the [symfinity/recipes](https://github.com/symfinity/recipes) Flex endpoint to your project's `composer.json` if it is not already configured.
+
+The `0.1` recipe:
+
+1. Registers `PrivacySettingsBundle` in `config/bundles.php`
+2. Copies `config/packages/symfinity_privacy_settings.yaml` from the package
+3. Seeds default `required` and `analytics` categories
+
+Ensure `symfinity/ux-blocks-form` is installed (Composer resolves it automatically). Run the ux-blocks-form recipe first if your project does not yet use form-tier components.
 
 ## Manual installation
 
-Only when Flex is unavailable: register bundle, copy config skeleton.
+When Flex is unavailable:
+
+1. Register `Symfinity\PrivacySettingsBundle\PrivacySettingsBundle` in `config/bundles.php`
+2. Copy `vendor/symfinity/privacy-settings-bundle/config/packages/symfinity_privacy_settings.yaml` to `config/packages/`
+3. Require `symfinity/ux-blocks-form` and enable AssetMapper paths from that package
 
 ## Verify installation
 
 ```bash
-# example: bin/console debug:config symfinity_* 
+php bin/console debug:config symfinity_privacy_settings
 ```
+
+You should see the configured category list.
 
 ## Next steps
 
-[Quick start](quickstart.md).
+- [Quickstart](quickstart.md)
+- [Configuration](configuration.md)

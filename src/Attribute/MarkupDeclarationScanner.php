@@ -14,7 +14,7 @@ final class MarkupDeclarationScanner
         preg_match_all('/\s(data-[a-z0-9-]+)\s*=/', $markup, $matches);
 
         $result = [];
-        $seen = array_unique($matches[1] ?? []);
+        $seen = array_unique($matches[1]);
         foreach ($seen as $attribute) {
             $status = StrictAttributeValidator::CANONICAL_ATTRIBUTE === $attribute ? 'accepted' : 'rejected';
             $result[] = [

@@ -1,0 +1,42 @@
+[data-privacy-consent] {
+    --privacy-consent-z: var(--ui-z-modal, 1050);
+    --privacy-consent-bg: var(--ui-color-surface-elevated, #fff);
+    --privacy-consent-border: var(--ui-color-border-subtle, rgb(15 23 42 / 12%));
+    --privacy-consent-shadow: var(--ui-shadow-lg, 0 10px 40px rgb(15 23 42 / 18%));
+    --privacy-consent-max-width: var(--ui-layout-content-max, 42rem);
+    --privacy-consent-gap: var(--ui-space-4, 1rem);
+}
+
+.privacy-consent {
+    position: fixed;
+    z-index: var(--privacy-consent-z);
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(calc(100% - 2rem), var(--privacy-consent-max-width));
+    padding: var(--privacy-consent-gap);
+    border: 1px solid var(--privacy-consent-border);
+    border-radius: var(--ui-radius-lg, 0.75rem);
+    background: var(--privacy-consent-bg);
+    box-shadow: var(--privacy-consent-shadow);
+}
+
+.privacy-consent--bottom {
+    bottom: var(--ui-space-4, 1rem);
+}
+
+.privacy-consent--sheet {
+    top: auto;
+    bottom: 0;
+    width: 100%;
+    max-width: none;
+    border-radius: var(--ui-radius-lg, 0.75rem) var(--ui-radius-lg, 0.75rem) 0 0;
+}
+
+.privacy-consent form {
+    display: grid;
+    gap: var(--privacy-consent-gap);
+}
+
+.privacy-consent [data-ui-role="form-actions"] {
+    margin-top: var(--ui-space-2, 0.5rem);
+}

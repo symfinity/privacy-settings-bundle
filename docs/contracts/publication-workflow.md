@@ -1,7 +1,6 @@
 # Contract: privacy preference publication workflow
 
-Feature: `symfinity 019`  
-Package: `symfinity/privacy-settings-bundle`
+**Package:** `symfinity/privacy-settings-bundle`
 
 ## Goal
 
