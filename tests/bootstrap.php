@@ -18,12 +18,17 @@ $packageVendorDir = realpath($packageRoot.'/vendor') ?: $packageRoot.'/vendor';
 
 $packageAutoloadActive = false;
 foreach (spl_autoload_functions() ?: [] as $loader) {
-    if (!\is_array($loader) || !isset($loader[0]) || !$loader[0] instanceof \Composer\Autoload\ClassLoader) {
+    if (!\is_array($loader) || !$loader[0] instanceof \Composer\Autoload\ClassLoader) {
         continue;
     }
 
     $ref = new \ReflectionClass($loader[0]);
-    $vendorDir = realpath(dirname($ref->getFileName(), 2)) ?: '';
+    $classFile = $ref->getFileName();
+    if (!\is_string($classFile)) {
+        continue;
+    }
+
+    $vendorDir = realpath(dirname($classFile, 2)) ?: '';
 
     if ($vendorDir === $packageVendorDir) {
         $packageAutoloadActive = true;
