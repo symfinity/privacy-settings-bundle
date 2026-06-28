@@ -45,6 +45,7 @@ final class PrivacyMediaEmbedRenderTest extends KernelTestCase
         ]);
 
         self::assertStringContainsString('privacy-media-embed--facade', $html);
+        self::assertStringContainsString('--privacy-media-aspect-ratio: 16 / 9', $html);
         self::assertStringContainsString('data-controller="privacy-settings-bundle--media-embed"', $html);
         self::assertStringContainsString('Load', $html);
         self::assertStringContainsString('Cookie settings', $html);

@@ -26,7 +26,7 @@ final class PrivacyMediaEmbed
 
     public string $title = '';
 
-    public string $aspectRatio = '16/9';
+    public string $aspectRatio = '16 / 9';
 
     public ?string $embedId = null;
 
@@ -52,7 +52,7 @@ final class PrivacyMediaEmbed
         ?string $mapQuery = null,
         ?string $embedUrl = null,
         string $title = '',
-        string $aspectRatio = '16/9',
+        string $aspectRatio = '16 / 9',
         ?string $embedId = null,
         ?string $subjectKey = null,
     ): void {
@@ -61,7 +61,7 @@ final class PrivacyMediaEmbed
         $this->mapQuery = $mapQuery;
         $this->embedUrl = $embedUrl;
         $this->title = trim($title);
-        $this->aspectRatio = '' !== trim($aspectRatio) ? trim($aspectRatio) : '16/9';
+        $this->aspectRatio = $this->normalizeAspectRatio($aspectRatio);
         $this->embedId = $this->resolveEmbedId($embedId);
         $this->subjectKey = $this->resolveSubjectKey($subjectKey);
 
@@ -133,6 +133,20 @@ final class PrivacyMediaEmbed
     /**
      * @return 'youtube'|'vimeo'|'google_maps'|'generic'
      */
+    private function normalizeAspectRatio(string $aspectRatio): string
+    {
+        $aspectRatio = trim($aspectRatio);
+        if ('' === $aspectRatio) {
+            return '16 / 9';
+        }
+
+        if (preg_match('/^(\d+(?:\.\d+)?)\s*\/\s*(\d+(?:\.\d+)?)$/', $aspectRatio, $matches)) {
+            return $matches[1].' / '.$matches[2];
+        }
+
+        return '16 / 9';
+    }
+
     private function normalizeProvider(string $provider): string
     {
         if (!in_array($provider, [

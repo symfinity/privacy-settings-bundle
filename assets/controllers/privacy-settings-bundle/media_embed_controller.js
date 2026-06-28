@@ -39,8 +39,11 @@ export default class extends Controller {
             return;
         }
 
+        this.element.classList.add('privacy-media-embed--loaded');
         this.facadeTarget.hidden = true;
+        this.facadeTarget.setAttribute('aria-hidden', 'true');
         this.frameTarget.hidden = false;
+        this.frameTarget.removeAttribute('aria-hidden');
 
         if (this.frameTarget.querySelector('iframe')) {
             return;
@@ -49,7 +52,7 @@ export default class extends Controller {
         const iframe = document.createElement('iframe');
         iframe.src = this.srcValue;
         iframe.title = this.titleValue;
-        iframe.loading = 'lazy';
+        iframe.loading = 'eager';
         iframe.referrerPolicy = 'strict-origin-when-cross-origin';
         iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
         iframe.allowFullscreen = true;

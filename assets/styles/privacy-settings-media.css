@@ -6,6 +6,7 @@
     --privacy-media-gap: var(--ui-space-4, 1rem);
     position: relative;
     width: 100%;
+    aspect-ratio: 16 / 9;
     aspect-ratio: var(--privacy-media-aspect-ratio, 16 / 9);
     overflow: hidden;
     border-radius: var(--ui-radius-lg, 0.75rem);
@@ -21,6 +22,12 @@
     border: 0;
 }
 
+.privacy-media-embed--facade .privacy-media-embed__facade,
+.privacy-media-embed--facade .privacy-media-embed__frame {
+    position: absolute;
+    inset: 0;
+}
+
 .privacy-media-embed__facade {
     display: flex;
     flex-direction: column;
@@ -31,6 +38,7 @@
     height: 100%;
     padding: var(--ui-space-6, 1.5rem);
     text-align: center;
+    z-index: 1;
 }
 
 .privacy-media-embed__message {
@@ -50,6 +58,7 @@
 .privacy-media-embed__frame {
     width: 100%;
     height: 100%;
+    z-index: 2;
 }
 
 .privacy-media-embed__frame iframe {
@@ -57,4 +66,12 @@
     width: 100%;
     height: 100%;
     border: 0;
+}
+
+.privacy-media-embed--loaded .privacy-media-embed__facade {
+    display: none !important;
+}
+
+.privacy-media-embed--loaded .privacy-media-embed__frame {
+    display: block;
 }
