@@ -23,20 +23,69 @@ symfinity_privacy_settings:
           description: Optional usage analytics
 ```
 
-## Capture and restore (PHP)
+## Symfony integration
+
+Flex copies `config/routes/symfinity_privacy_settings.yaml` (POST `/_privacy/consent/{subjectKey}`). Manual installs: copy that file from the package into `config/routes/` or import the bundle file:
+
+```yaml
+# config/routes/symfinity_privacy_settings.yaml
+symfinity_privacy_settings:
+    resource: '@PrivacySettingsBundle/config/routes.yaml'
+```
+
+`ConsentSubmitController` reads the posted `privacy[…]` fields, calls `PreferenceCaptureService`, and redirects back to the referer.
+
+### React to consent changes
+
+Listen for `ConsentDecisionEvent` when a category toggles (banner save or programmatic capture):
 
 ```php
-use Symfinity\PrivacySettingsBundle\Consent\PreferenceCaptureService;
+<?php
+
+declare(strict_types=1);
+
+namespace App\EventListener;
+
+use Symfinity\PrivacySettingsBundle\Event\ConsentDecisionEvent;
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+
+#[AsEventListener]
+final class AnalyticsConsentListener
+{
+    public function __invoke(ConsentDecisionEvent $event): void
+    {
+        if ('analytics' !== $event->categoryId || !$event->newState) {
+            return;
+        }
+
+        // Enable analytics scripts, tag managers, etc.
+    }
+}
+```
+
+### Read choices in a controller
+
+Inject `PreferenceRestoreService` when you need the effective state for a visitor key:
+
+```php
 use Symfinity\PrivacySettingsBundle\Consent\PreferenceRestoreService;
 use Symfinity\PrivacySettingsBundle\Symfony\CategoryModelNormalizer;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-/** @var CategoryModelNormalizer $normalizer */
-$categories = $normalizer->normalize($this->getParameter('symfinity.privacy_settings.categories'));
+public function __construct(
+    private readonly PreferenceRestoreService $restoreService,
+    private readonly CategoryModelNormalizer $normalizer,
+    #[Autowire(param: 'symfinity.privacy_settings.categories')]
+    private readonly array $rawCategories,
+) {}
 
-$restore = $this->restoreService->effectiveChoices('visitor-123', $categories);
-// ['required' => true, 'analytics' => false]
+public function dashboard(string $subjectKey): Response
+{
+    $categories = $this->normalizer->normalize($this->rawCategories);
+    $choices = $this->restoreService->effectiveChoices($subjectKey, $categories);
 
-$capture->capture('visitor-123', $categories, ['required' => true, 'analytics' => true]);
+    // $choices['analytics'] === true|false
+}
 ```
 
 ## Embed ConsentBanner (Twig)
