@@ -7,6 +7,25 @@ namespace Symfinity\PrivacySettingsBundle\DependencyInjection;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
+/**
+ * @phpstan-type PrivacySettingsConfig array{
+ *     categories: list<array{id: string, label: string, default_state: string, description?: string}>,
+ *     enforcement: array{client_scripts: bool},
+ *     storage: array{
+ *         driver: 'cookie'|'session',
+ *         cookie: array{
+ *             name: string,
+ *             lifetime_days: int,
+ *             policy_version: string,
+ *             path: string,
+ *             domain: string|null,
+ *             secure: 'auto'|'true'|'false',
+ *             samesite: 'lax'|'strict'|'none',
+ *             http_only: bool,
+ *         },
+ *     },
+ * }
+ */
 final class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder(): TreeBuilder

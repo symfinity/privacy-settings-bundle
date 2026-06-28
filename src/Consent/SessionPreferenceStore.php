@@ -35,26 +35,37 @@ final class SessionPreferenceStore implements PreferenceStoreInterface
         $session = $this->session();
         /** @var array<string, array{subjectKey: string, choices: array<string, bool>, updatedAt: string, source: string}> $all */
         $all = $session->get(self::SESSION_KEY, []);
-        $payload = $all[$subjectKey] ?? null;
+        /** @var mixed $rawPayload */
+        $rawPayload = $all[$subjectKey] ?? null;
 
-        if (!\is_array($payload)) {
+        if (!\is_array($rawPayload)) {
             return null;
         }
 
-        $updatedAt = \DateTimeImmutable::createFromFormat(\DateTimeInterface::ATOM, $payload['updatedAt'] ?? '');
+        /** @var array<mixed> $payload */
+        $payload = $rawPayload;
+
+        if (!\is_string($payload['updatedAt'] ?? null)
+            || !\is_array($payload['choices'] ?? null)
+            || !\is_string($payload['subjectKey'] ?? null)
+            || !\is_string($payload['source'] ?? null)) {
+            return null;
+        }
+
+        $updatedAt = \DateTimeImmutable::createFromFormat(\DateTimeInterface::ATOM, $payload['updatedAt']);
 
         if (!$updatedAt instanceof \DateTimeImmutable) {
             return null;
         }
 
         /** @var array<string, bool> $choices */
-        $choices = $payload['choices'] ?? [];
+        $choices = $payload['choices'];
 
         return new PrivacyPreferenceState(
-            subjectKey: $payload['subjectKey'] ?? $subjectKey,
+            subjectKey: $payload['subjectKey'],
             choices: $choices,
             updatedAt: $updatedAt,
-            source: $payload['source'] ?? 'ui',
+            source: $payload['source'],
         );
     }
 

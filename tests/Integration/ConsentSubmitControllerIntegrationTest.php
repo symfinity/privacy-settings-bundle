@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Symfinity\PrivacySettingsBundle\Tests\Integration;
 
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 final class ConsentSubmitControllerIntegrationTest extends WebTestCase
@@ -17,7 +16,6 @@ final class ConsentSubmitControllerIntegrationTest extends WebTestCase
     public function testConsentSubmitRouteIsCallable(): void
     {
         $client = self::createClient();
-        \assert($client instanceof KernelBrowser);
 
         $client->request(
             'POST',

@@ -16,6 +16,9 @@ use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 
+/**
+ * @phpstan-import-type PrivacySettingsConfig from Configuration
+ */
 final class PrivacySettingsExtension extends Extension implements PrependExtensionInterface
 {
     public function prepend(ContainerBuilder $container): void
@@ -58,6 +61,7 @@ final class PrivacySettingsExtension extends Extension implements PrependExtensi
     public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();
+        /** @var PrivacySettingsConfig $config */
         $config = $this->processConfiguration($configuration, $configs);
 
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../../config'));

@@ -50,7 +50,7 @@ final class CookiePreferenceStore implements PreferenceStoreInterface
             ->withPath($this->cookiePath)
             ->withSecure($secure)
             ->withHttpOnly($this->cookieHttpOnly)
-            ->withSameSite($this->cookieSameSite);
+            ->withSameSite($this->resolveSameSite());
 
         if (null !== $this->cookieDomain && '' !== $this->cookieDomain) {
             $cookie = $cookie->withDomain($this->cookieDomain);
@@ -65,25 +65,44 @@ final class CookiePreferenceStore implements PreferenceStoreInterface
             return $this->requestCache[$subjectKey];
         }
 
-        $payload = $this->loadAllSubjects()[$subjectKey] ?? null;
-        if (!\is_array($payload)) {
+        /** @var mixed $rawPayload */
+        $rawPayload = $this->loadAllSubjects()[$subjectKey] ?? null;
+        if (!\is_array($rawPayload)) {
             return null;
         }
 
-        $updatedAt = \DateTimeImmutable::createFromFormat(\DateTimeInterface::ATOM, $payload['u'] ?? '');
+        /** @var array<mixed> $payload */
+        $payload = $rawPayload;
+
+        if (!\is_string($payload['u'] ?? null) || !\is_array($payload['c'] ?? null) || !\is_string($payload['s'] ?? null)) {
+            return null;
+        }
+
+        $updatedAt = \DateTimeImmutable::createFromFormat(\DateTimeInterface::ATOM, $payload['u']);
         if (!$updatedAt instanceof \DateTimeImmutable) {
             return null;
         }
 
         /** @var array<string, bool> $choices */
-        $choices = $payload['c'] ?? [];
+        $choices = $payload['c'];
 
         return new PrivacyPreferenceState(
             subjectKey: $subjectKey,
             choices: $choices,
             updatedAt: $updatedAt,
-            source: $payload['s'] ?? 'ui',
+            source: $payload['s'],
         );
+    }
+
+    /**
+     * @return ''|'lax'|'none'|'strict'|null
+     */
+    private function resolveSameSite(): ?string
+    {
+        return match ($this->cookieSameSite) {
+            'lax', 'strict', 'none', '' => $this->cookieSameSite,
+            default => null,
+        };
     }
 
     /**

@@ -23,7 +23,9 @@ final class StimulusControllerPathsIntegrationTest extends KernelTestCase
         $paths = $generator->getControllerPaths();
         self::assertIsArray($paths);
 
-        $projectDir = static::$kernel->getProjectDir();
+        $kernel = self::$kernel;
+        self::assertNotNull($kernel);
+        $projectDir = $kernel->getProjectDir();
         $appControllers = $projectDir.'/assets/controllers';
         $bundleControllers = \dirname(__DIR__, 2).'/assets/controllers';
 

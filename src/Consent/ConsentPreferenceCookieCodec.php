@@ -50,18 +50,15 @@ final class ConsentPreferenceCookieCodec
             return null;
         }
 
-        if (($decoded['v'] ?? null) !== self::FORMAT_VERSION) {
+        if ($decoded['v'] !== self::FORMAT_VERSION) {
             return null;
         }
 
-        if (($decoded['p'] ?? null) !== $this->policyVersion) {
+        if ($decoded['p'] !== $this->policyVersion) {
             return null;
         }
 
-        /** @var array<string, SubjectPayload> $subjects */
-        $subjects = $decoded['subjects'] ?? [];
-
-        return $subjects;
+        return $decoded['subjects'];
     }
 
     /**
