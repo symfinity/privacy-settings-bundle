@@ -28,18 +28,60 @@ final class ConsentSubmitController
         /** @var list<PrivacyCategory> $categories */
         $categories = $this->normalizer->normalize($this->rawCategories);
 
-        /** @var array<string, mixed> $privacy */
-        $privacy = $request->request->all('privacy');
-        $choices = [];
+        $decision = $request->request->getString('consent_decision');
+        $source = 'ui';
 
-        foreach ($categories as $category) {
-            $choices[$category->id] = $category->isRequired() || isset($privacy[$category->id]);
+        if ('accept_all' === $decision) {
+            $choices = $this->choicesForAcceptAll($categories);
+            $source = 'quick_accept';
+        } elseif ('reject_all' === $decision) {
+            $choices = $this->choicesForRejectAll($categories);
+            $source = 'quick_reject';
+        } else {
+            /** @var array<string, mixed> $privacy */
+            $privacy = $request->request->all('privacy');
+            $choices = [];
+
+            foreach ($categories as $category) {
+                $choices[$category->id] = $category->isRequired() || isset($privacy[$category->id]);
+            }
+            $source = 'details';
         }
 
-        $this->captureService->capture($subjectKey, $categories, $choices);
+        $this->captureService->capture($subjectKey, $categories, $choices, $source);
 
         $referer = $request->headers->get('Referer');
 
         return new RedirectResponse(is_string($referer) && '' !== $referer ? $referer : '/');
+    }
+
+    /**
+     * @param list<PrivacyCategory> $categories
+     *
+     * @return array<string, bool>
+     */
+    private function choicesForAcceptAll(array $categories): array
+    {
+        $choices = [];
+        foreach ($categories as $category) {
+            $choices[$category->id] = true;
+        }
+
+        return $choices;
+    }
+
+    /**
+     * @param list<PrivacyCategory> $categories
+     *
+     * @return array<string, bool>
+     */
+    private function choicesForRejectAll(array $categories): array
+    {
+        $choices = [];
+        foreach ($categories as $category) {
+            $choices[$category->id] = $category->isRequired();
+        }
+
+        return $choices;
     }
 }

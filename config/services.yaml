@@ -8,6 +8,10 @@ services:
     exclude:
       - '../src/DependencyInjection/'
       - '../src/PrivacySettingsBundle.php'
+      - '../src/Controller/'
+
+  Symfinity\PrivacySettingsBundle\Controller\ConsentSubmitController:
+    tags: ['controller.service_arguments']
 
   Symfinity\PrivacySettingsBundle\Consent\PreferenceStoreInterface:
-    alias: Symfinity\PrivacySettingsBundle\Consent\InMemoryPreferenceStore
+    alias: Symfinity\PrivacySettingsBundle\Consent\SessionPreferenceStore

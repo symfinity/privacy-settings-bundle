@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Symfinity\PrivacySettingsBundle\Tests\Integration;
 
+use Symfinity\PrivacySettingsBundle\Consent\InMemoryPreferenceStore;
 use Symfinity\PrivacySettingsBundle\PrivacySettingsBundle;
 use Symfinity\UiKernel\UiKernelBundle;
 use Symfinity\UxBlocksCore\SymfinityUxBlocksCoreBundle;
@@ -106,7 +107,8 @@ final class PrivacySettingsTestKernel extends Kernel
                 ->args([['form_div_layout.html.twig'], service('twig')])
             ->set('twig.form.renderer', FormRenderer::class)
                 ->args([service('twig.form.engine'), service('security.csrf.token_manager')->nullOnInvalid()])
-                ->tag('twig.runtime');
+                ->tag('twig.runtime')
+            ->set('Symfinity\PrivacySettingsBundle\Consent\PreferenceStoreInterface', InMemoryPreferenceStore::class);
 
         $container->extension('twig_component', [
             'anonymous_template_directory' => 'components',

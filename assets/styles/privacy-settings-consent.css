@@ -5,14 +5,30 @@
     --privacy-consent-shadow: var(--ui-shadow-lg, 0 10px 40px rgb(15 23 42 / 18%));
     --privacy-consent-max-width: var(--ui-layout-content-max, 42rem);
     --privacy-consent-gap: var(--ui-space-4, 1rem);
+    --privacy-consent-backdrop: var(--ui-color-overlay, rgb(15 23 42 / 55%));
 }
 
 .privacy-consent {
     position: fixed;
+    inset: 0;
     z-index: var(--privacy-consent-z);
-    left: 50%;
-    transform: translateX(-50%);
+    display: grid;
+    place-items: center;
+    padding: var(--ui-space-4, 1rem);
+}
+
+.privacy-consent__backdrop {
+    position: absolute;
+    inset: 0;
+    background: var(--privacy-consent-backdrop);
+}
+
+.privacy-consent__dialog {
+    position: relative;
+    z-index: 1;
     width: min(calc(100% - 2rem), var(--privacy-consent-max-width));
+    max-height: min(90vh, 40rem);
+    overflow: auto;
     padding: var(--privacy-consent-gap);
     border: 1px solid var(--privacy-consent-border);
     border-radius: var(--ui-radius-lg, 0.75rem);
@@ -20,23 +36,54 @@
     box-shadow: var(--privacy-consent-shadow);
 }
 
-.privacy-consent--bottom {
-    bottom: var(--ui-space-4, 1rem);
+.privacy-consent__title {
+    margin: 0;
+    font-size: var(--ui-font-size-lg, 1.125rem);
+    font-weight: var(--ui-font-weight-semibold, 600);
 }
 
-.privacy-consent--sheet {
-    top: auto;
-    bottom: 0;
-    width: 100%;
-    max-width: none;
-    border-radius: var(--ui-radius-lg, 0.75rem) var(--ui-radius-lg, 0.75rem) 0 0;
+.privacy-consent__lede {
+    margin: var(--ui-space-2, 0.5rem) 0 var(--privacy-consent-gap);
+    color: var(--ui-color-text-muted, rgb(15 23 42 / 72%));
+    font-size: var(--ui-font-size-sm, 0.875rem);
 }
 
-.privacy-consent form {
+.privacy-consent__quick-actions {
+    display: grid;
+    gap: var(--ui-space-2, 0.5rem);
+}
+
+.privacy-consent__panel--details form {
     display: grid;
     gap: var(--privacy-consent-gap);
 }
 
-.privacy-consent [data-ui-role="form-actions"] {
+.privacy-consent__panel--details [data-ui-role="form-actions"] {
     margin-top: var(--ui-space-2, 0.5rem);
+}
+
+.privacy-consent--bottom {
+    place-items: end center;
+    padding-bottom: var(--ui-space-4, 1rem);
+}
+
+.privacy-consent--bottom .privacy-consent__backdrop {
+    background: transparent;
+    pointer-events: none;
+}
+
+.privacy-consent--sheet {
+    place-items: end stretch;
+    padding: 0;
+}
+
+.privacy-consent--sheet .privacy-consent__dialog {
+    width: 100%;
+    max-width: none;
+    max-height: min(85vh, 40rem);
+    border-radius: var(--ui-radius-lg, 0.75rem) var(--ui-radius-lg, 0.75rem) 0 0;
+}
+
+.privacy-consent--sheet .privacy-consent__backdrop {
+    background: var(--privacy-consent-backdrop);
 }

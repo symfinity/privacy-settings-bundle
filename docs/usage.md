@@ -15,7 +15,7 @@
 
 ### ConsentBanner component
 
-Renders a fixed banner with one row per configured category, composing ux-blocks-form `Form`, `Field`, `Switch`/`Checkbox`, `FormActions`, and core `Button`.
+Renders a modal consent surface (backdrop + two-step flow: quick accept/reject, then optional per-category settings) composing ux-blocks-form `Form`, `Field`, `Switch`/`Checkbox`, `FormActions`, and core `Button`.
 
 ```twig
 {{ component('ConsentBanner', {
@@ -27,7 +27,7 @@ Renders a fixed banner with one row per configured category, composing ux-blocks
 | Prop | Default | Description |
 |------|---------|-------------|
 | `subjectKey` | `visitor` | Key passed to capture/restore |
-| `position` | `bottom` | `bottom` or `sheet` layout variant |
+| `position` | `modal` | `modal` (backdrop dialog), `bottom`, or `sheet` layout variant |
 
 Submit posts to `/_privacy/consent/{subjectKey}` (bundle route) and calls `PreferenceCaptureService`.
 
@@ -70,7 +70,7 @@ Use `MarkupDeclarationScanner` and `TemplateAttributeContract` in CI or custom c
 - Forbidden attributes (`data-cookiecategory`, `data-cc`) always fail validation — see [strict-attribute-migration](strict-attribute-migration.md)
 - Unknown preference keys in capture payloads raise `PRIVACY_UNKNOWN_PREFERENCE_CATEGORY`
 - Required categories cannot be disabled — `PRIVACY_REQUIRED_CATEGORY_DISABLED`
-- Default in-memory store does not survive requests — replace for production
+- Default in-memory store does not survive requests — replace for production. Default wiring uses `SessionPreferenceStore` when the bundle is installed in a full Symfony app.
 
 ## See also
 

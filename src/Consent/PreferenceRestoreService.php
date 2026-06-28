@@ -13,6 +13,11 @@ final class PreferenceRestoreService
     ) {
     }
 
+    public function hasStoredDecision(string $subjectKey): bool
+    {
+        return null !== $this->store->find($subjectKey);
+    }
+
     /**
      * @param list<PrivacyCategory> $categories
      *

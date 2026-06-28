@@ -15,10 +15,12 @@ use Symfony\UX\TwigComponent\Attribute\ExposeInTemplate;
 #[AsTwigComponent('ConsentBanner', template: '@SymfinityPrivacySettings/components/ConsentBanner.html.twig')]
 final class ConsentBanner
 {
-    /** @var ''|'bottom'|'sheet' */
-    public string $position = 'bottom';
+    /** @var 'modal'|'bottom'|'sheet' */
+    public string $position = 'modal';
 
     private string $subjectKey = 'visitor';
+
+    private bool $needsConsent = true;
 
     /** @var list<PrivacyCategory> */
     private array $categories = [];
@@ -36,12 +38,19 @@ final class ConsentBanner
     ) {
     }
 
-    public function mount(string $subjectKey = 'visitor', string $position = 'bottom'): void
+    public function mount(string $subjectKey = 'visitor', string $position = 'modal'): void
     {
         $this->subjectKey = '' !== trim($subjectKey) ? trim($subjectKey) : 'visitor';
-        $this->position = \in_array($position, ['bottom', 'sheet'], true) ? $position : 'bottom';
+        $this->position = \in_array($position, ['modal', 'bottom', 'sheet'], true) ? $position : 'modal';
         $this->categories = $this->normalizer->normalize($this->rawCategories);
         $this->choices = $this->restoreService->effectiveChoices($this->subjectKey, $this->categories);
+        $this->needsConsent = !$this->restoreService->hasStoredDecision($this->subjectKey);
+    }
+
+    #[ExposeInTemplate('needsConsent')]
+    public function exposedNeedsConsent(): bool
+    {
+        return $this->needsConsent;
     }
 
     #[ExposeInTemplate('subjectKey')]

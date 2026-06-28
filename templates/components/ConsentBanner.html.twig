@@ -1,51 +1,107 @@
+{% if needsConsent %}
 <div
     data-privacy-consent
     class="privacy-consent privacy-consent--{{ position }}"
+    data-controller="privacy-settings-bundle--consent"
 >
-    {% component Form with {
-        method: 'post',
-        action: submitUrl,
-        title: 'Privacy preferences'
-    } %}
-        {% block content %}
-            {% for category in categories %}
-                {% component Field with {
-                    label: category.label,
-                    hint: category.description,
-                    controlId: 'privacy-' ~ category.id
-                } %}
-                    {% block content %}
-                        {% if category.isRequired %}
-                            {% component Checkbox with {
-                                name: 'privacy[' ~ category.id ~ ']',
-                                value: '1',
-                                checked: true,
-                                disabled: true
-                            } %}{% endcomponent %}
-                        {% elseif choices[category.id] %}
-                            {% component Switch with {
-                                name: 'privacy[' ~ category.id ~ ']',
-                                value: '1',
-                                checked: true
-                            } %}{% endcomponent %}
-                        {% else %}
-                            {% component Switch with {
-                                name: 'privacy[' ~ category.id ~ ']',
-                                value: '1'
-                            } %}{% endcomponent %}
-                        {% endif %}
-                    {% endblock %}
-                {% endcomponent %}
-            {% endfor %}
-        {% endblock %}
-        {% block footer %}
-            {% component FormActions with { align: 'stretch' } %}
+    <div class="privacy-consent__backdrop" aria-hidden="true"></div>
+    <div
+        class="privacy-consent__dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="privacy-consent-title"
+    >
+        <section
+            class="privacy-consent__panel privacy-consent__panel--quick"
+            data-privacy-settings-bundle--consent-target="quickPanel"
+        >
+            <h2 id="privacy-consent-title" class="privacy-consent__title">Privacy settings</h2>
+            <p class="privacy-consent__lede">
+                We use optional categories to improve the site. Accept all, reject optional tracking, or manage individual categories.
+            </p>
+            <div class="privacy-consent__quick-actions" data-ui-role="form-actions">
+                <form method="post" action="{{ submitUrl }}">
+                    <input type="hidden" name="consent_decision" value="accept_all">
+                    {% component Button with { variant: 'primary', block: true } %}
+                        {% block content %}Accept all{% endblock %}
+                    {% endcomponent %}
+                </form>
+                <form method="post" action="{{ submitUrl }}">
+                    <input type="hidden" name="consent_decision" value="reject_all">
+                    {% component Button with { variant: 'secondary', block: true } %}
+                        {% block content %}Reject optional{% endblock %}
+                    {% endcomponent %}
+                </form>
+                <button
+                    type="button"
+                    data-ui-variant="ghost"
+                    data-ui-layout="block"
+                    data-action="click->privacy-settings-bundle--consent#openDetails"
+                >
+                    <span data-ui-part="label">Manage settings</span>
+                </button>
+            </div>
+        </section>
+
+        <section
+            class="privacy-consent__panel privacy-consent__panel--details"
+            hidden
+            data-privacy-settings-bundle--consent-target="detailsPanel"
+        >
+            {% component Form with {
+                method: 'post',
+                action: submitUrl,
+                title: 'Privacy settings'
+            } %}
                 {% block content %}
-                    {% component Button with { variant: 'primary' } %}
-                        {% block content %}Save preferences{% endblock %}
+                    {% for category in categories %}
+                        {% component Field with {
+                            label: category.label,
+                            hint: category.description,
+                            controlId: 'privacy-' ~ category.id
+                        } %}
+                            {% block content %}
+                                {% if category.isRequired %}
+                                    {% component Checkbox with {
+                                        name: 'privacy[' ~ category.id ~ ']',
+                                        value: '1',
+                                        checked: true,
+                                        disabled: true
+                                    } %}{% endcomponent %}
+                                {% elseif choices[category.id] %}
+                                    {% component Switch with {
+                                        name: 'privacy[' ~ category.id ~ ']',
+                                        value: '1',
+                                        checked: true
+                                    } %}{% endcomponent %}
+                                {% else %}
+                                    {% component Switch with {
+                                        name: 'privacy[' ~ category.id ~ ']',
+                                        value: '1'
+                                    } %}{% endcomponent %}
+                                {% endif %}
+                            {% endblock %}
+                        {% endcomponent %}
+                    {% endfor %}
+                {% endblock %}
+                {% block footer %}
+                    {% component FormActions with { align: 'stretch' } %}
+                        {% block content %}
+                            <button
+                                type="button"
+                                data-ui-variant="ghost"
+                                data-action="click->privacy-settings-bundle--consent#closeDetails"
+                            >
+                                <span data-ui-part="label">Back</span>
+                            </button>
+                            {% component Button with { variant: 'primary' } %}
+                                {% block content %}Save settings{% endblock %}
+                            {% endcomponent %}
+                        {% endblock %}
                     {% endcomponent %}
                 {% endblock %}
             {% endcomponent %}
-        {% endblock %}
-    {% endcomponent %}
+        </section>
+    </div>
 </div>
+{% endif %}
