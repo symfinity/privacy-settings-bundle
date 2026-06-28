@@ -233,7 +233,7 @@ Specialized component for third-party **iframe** embeds tied to the **`media`** 
 | `mapQuery` | Google Maps search query |
 | `embedUrl` | Required for `generic` — absolute `https` only |
 | `title` | Accessible iframe label (**required**) |
-| `aspectRatio` | CSS aspect-ratio value; default `16/9` |
+| `aspectRatio` | CSS aspect-ratio value; default `16 / 9` (`16/9` accepted) |
 | `embedId` | Optional stable id for client unlock tracking |
 | `subjectKey` | Optional; defaults to `visitor` |
 

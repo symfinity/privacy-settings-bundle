@@ -5,6 +5,13 @@ All notable changes to **symfinity/privacy-settings-bundle** are documented here
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.1] - 2026-06-28
+
+### Fixed
+
+- **PrivacyMediaEmbed Load** — clicking **Load** now hides the facade and shows the iframe at the correct size (absolute facade/frame layout, `privacy-media-embed--loaded` state, eager iframe fetch on unlock)
+- **`aspectRatio` prop** — values such as `16/9` and `4/3` normalize to spaced CSS ratios (`16 / 9`, `4 / 3`) so `aspect-ratio` applies reliably in all browsers
+
 ## [0.2.0] - 2026-06-28
 
 ### Added

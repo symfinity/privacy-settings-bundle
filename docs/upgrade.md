@@ -1,5 +1,13 @@
 # Upgrade and migration
 
+## 0.2.1 (patch)
+
+Bugfix release for **PrivacyMediaEmbed** — **Load** unlock and embed sizing. No config or recipe changes.
+
+```bash
+composer update symfinity/privacy-settings-bundle:^0.2.1
+```
+
 ## 0.2.0 (from 0.1.x)
 
 ### What you get
