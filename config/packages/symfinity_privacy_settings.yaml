@@ -1,12 +1,45 @@
+# Privacy settings — declarative category model, consent persistence, and optional client enforcement.
+#
+# Categories drive ConsentBanner copy and every enforcement helper (privacy_consent(), PrivacyMediaEmbed,
+# data-privacy-category scripts). Rename labels and descriptions for your legal policy; keep stable ids
+# unless you intend to migrate stored consent. When ids or default_state values change, bump
+# storage.cookie.policy_version so returning visitors re-consent.
 symfinity_privacy_settings:
+    # v0.2 client enforcement. When true, ConsentBanner attaches the script-unblocker Stimulus controller
+    # so deferred <script type="text/plain" data-privacy-category="…"> tags can execute after consent.
+    # Server-side privacy_consent() and PrivacyMediaEmbed work with client_scripts left false (default).
+    enforcement:
+        client_scripts: false
+
+    # Persist effective per-category booleans between requests. Prefer cookie (default) for anonymous sites;
+    # session scopes consent to the PHP session only — see troubleshooting.
+    storage:
+        driver: cookie
+        cookie:
+            lifetime_days: 180   # Minimum 180 days — consent should survive routine return visits.
+            policy_version: '1'  # Increment when category config changes to invalidate stale cookies.
+
+    # Default four-category set: one required bucket plus three opt-in groups aligned with common
+    # enforcement patterns (measurement, ads, third-party embeds). Add or remove entries; ids must be
+    # unique kebab-case slugs referenced from Twig and capture payloads.
     categories:
         -
             id: required
             label: Required
             default_state: required
-            description: Essential services and security primitives
+            description: Essential cookies and storage for security, remembering your consent choices, and core site functionality. Always active.
         -
             id: analytics
             label: Analytics
             default_state: disabled
-            description: Optional usage and performance analytics
+            description: Optional measurement of how the site is used — page views, performance, and errors — to help improve the experience.
+        -
+            id: marketing
+            label: Marketing
+            default_state: disabled
+            description: Optional cookies for ad campaign measurement and showing related content on other websites.
+        -
+            id: media
+            label: Media
+            default_state: disabled
+            description: Optional third-party embeds such as video and audio players, maps, widgets, and social media content.

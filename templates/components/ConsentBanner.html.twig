@@ -1,107 +1,172 @@
-{% if needsConsent %}
+<link rel="stylesheet" href="{{ asset('privacy-settings-bundle/styles/privacy-settings-consent.css') }}">
+<script type="application/json" id="privacy-settings-effective-choices">{{ choices|json_encode|raw }}</script>
 <div
     data-privacy-consent
-    class="privacy-consent privacy-consent--{{ position }}"
-    data-controller="privacy-settings-bundle--consent"
+    class="privacy-consent"
+    data-controller="privacy-settings-bundle--consent{% if clientScriptsEnabled %} privacy-settings-bundle--script-unblocker{% endif %}"
+    {% if not needsConsent %}hidden{% endif %}
+    {% if clientScriptsEnabled %}
+        data-privacy-settings-bundle--script-unblocker-choices-value="{{ choices|json_encode|e('html_attr') }}"
+    {% endif %}
 >
     <div class="privacy-consent__backdrop" aria-hidden="true"></div>
+
     <div
-        class="privacy-consent__dialog"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="privacy-consent-title"
+        class="privacy-consent__quick"
+        data-privacy-settings-bundle--consent-target="quickPanel"
+        {% if not needsConsent %}hidden{% endif %}
     >
-        <section
-            class="privacy-consent__panel privacy-consent__panel--quick"
-            data-privacy-settings-bundle--consent-target="quickPanel"
+        <div
+            class="privacy-consent__quick-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="privacy-consent-title"
         >
             <h2 id="privacy-consent-title" class="privacy-consent__title">Privacy settings</h2>
             <p class="privacy-consent__lede">
                 We use optional categories to improve the site. Accept all, reject optional tracking, or manage individual categories.
+                {% if privacyPolicyUrl %}
+                    See our <a href="{{ privacyPolicyUrl }}" class="privacy-consent__link">privacy policy</a>.
+                {% endif %}
             </p>
             <div class="privacy-consent__quick-actions" data-ui-role="form-actions">
-                <form method="post" action="{{ submitUrl }}">
-                    <input type="hidden" name="consent_decision" value="accept_all">
-                    {% component Button with { variant: 'primary', block: true } %}
-                        {% block content %}Accept all{% endblock %}
-                    {% endcomponent %}
-                </form>
-                <form method="post" action="{{ submitUrl }}">
-                    <input type="hidden" name="consent_decision" value="reject_all">
-                    {% component Button with { variant: 'secondary', block: true } %}
-                        {% block content %}Reject optional{% endblock %}
-                    {% endcomponent %}
-                </form>
-                <button
-                    type="button"
-                    data-ui-variant="ghost"
-                    data-ui-layout="block"
-                    data-action="click->privacy-settings-bundle--consent#openDetails"
-                >
-                    <span data-ui-part="label">Manage settings</span>
-                </button>
+                <div class="privacy-consent__quick-action">
+                    <form method="post" action="{{ submitUrl }}" data-turbo="false">
+                        <input type="hidden" name="consent_decision" value="accept_all">
+                        <button
+                            type="submit"
+                            data-ui-role="button"
+                            data-ui-variant="primary"
+                            data-ui-appearance="solid"
+                        >
+                            <span data-ui-part="label">Accept all</span>
+                        </button>
+                    </form>
+                </div>
+                <div class="privacy-consent__quick-action">
+                    <form method="post" action="{{ submitUrl }}" data-turbo="false">
+                        <input type="hidden" name="consent_decision" value="reject_all">
+                        <button
+                            type="submit"
+                            data-ui-role="button"
+                            data-ui-variant="secondary"
+                            data-ui-appearance="solid"
+                        >
+                            <span data-ui-part="label">Reject optional</span>
+                        </button>
+                    </form>
+                </div>
+                <div class="privacy-consent__quick-action">
+                    <button
+                        type="button"
+                        data-ui-role="button"
+                        data-ui-variant="neutral"
+                        data-ui-appearance="outline"
+                        data-action="click->privacy-settings-bundle--consent#openDetails"
+                    >
+                        <span data-ui-part="label">Manage settings</span>
+                    </button>
+                </div>
             </div>
-        </section>
+        </div>
+    </div>
 
-        <section
-            class="privacy-consent__panel privacy-consent__panel--details"
-            hidden
-            data-privacy-settings-bundle--consent-target="detailsPanel"
+    <div
+        class="privacy-consent__details"
+        hidden
+        data-privacy-settings-bundle--consent-target="detailsPanel"
+    >
+        <div
+            class="privacy-consent__details-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="privacy-consent-details-title"
         >
-            {% component Form with {
-                method: 'post',
-                action: submitUrl,
-                title: 'Privacy settings'
-            } %}
-                {% block content %}
+            <form method="post" action="{{ submitUrl }}" data-turbo="false" class="privacy-consent__details-form">
+                <header class="privacy-consent__details-header">
+                    <div>
+                        <h2 id="privacy-consent-details-title" class="privacy-consent__title">Privacy settings</h2>
+                        <p class="privacy-consent__lede">
+                            Choose which categories to allow.
+                            {% if privacyPolicyUrl %}
+                                See our <a href="{{ privacyPolicyUrl }}" class="privacy-consent__link">privacy policy</a>.
+                            {% endif %}
+                        </p>
+                    </div>
+                </header>
+
+                <div class="privacy-consent__groups">
                     {% for category in categories %}
-                        {% component Field with {
-                            label: category.label,
-                            hint: category.description,
-                            controlId: 'privacy-' ~ category.id
-                        } %}
-                            {% block content %}
-                                {% if category.isRequired %}
-                                    {% component Checkbox with {
-                                        name: 'privacy[' ~ category.id ~ ']',
-                                        value: '1',
-                                        checked: true,
-                                        disabled: true
-                                    } %}{% endcomponent %}
-                                {% elseif choices[category.id] %}
-                                    {% component Switch with {
-                                        name: 'privacy[' ~ category.id ~ ']',
-                                        value: '1',
-                                        checked: true
-                                    } %}{% endcomponent %}
-                                {% else %}
-                                    {% component Switch with {
-                                        name: 'privacy[' ~ category.id ~ ']',
-                                        value: '1'
-                                    } %}{% endcomponent %}
-                                {% endif %}
-                            {% endblock %}
-                        {% endcomponent %}
+                        <article class="privacy-consent__group{% if category.isRequired %} privacy-consent__group--required{% endif %}" id="privacy-group-{{ category.id }}">
+                            <header class="privacy-consent__group-header">
+                                <span class="privacy-consent__group-title">{{ category.label }}</span>
+                                <label class="privacy-consent__switch{% if category.isRequired %} privacy-consent__switch--locked{% endif %}" for="privacy-{{ category.id }}">
+                                    <span class="visually-hidden">{{ category.label }}</span>
+                                    {% if category.isRequired %}
+                                        <input
+                                            id="privacy-{{ category.id }}"
+                                            type="checkbox"
+                                            role="switch"
+                                            checked
+                                            disabled
+                                            aria-labelledby="privacy-group-{{ category.id }}"
+                                        >
+                                        <span class="privacy-consent__switch-track privacy-consent__switch-track--on" aria-hidden="true"></span>
+                                        <input type="hidden" name="privacy[{{ category.id }}]" value="1">
+                                    {% else %}
+                                        <input
+                                            id="privacy-{{ category.id }}"
+                                            name="privacy[{{ category.id }}]"
+                                            type="checkbox"
+                                            role="switch"
+                                            value="1"
+                                            {% if choices[category.id] %}checked{% endif %}
+                                            aria-labelledby="privacy-group-{{ category.id }}"
+                                        >
+                                        <span class="privacy-consent__switch-track{% if choices[category.id] %} privacy-consent__switch-track--on{% endif %}" aria-hidden="true"></span>
+                                    {% endif %}
+                                </label>
+                            </header>
+                            {% if category.description %}
+                                <p class="privacy-consent__group-description">{{ category.description }}</p>
+                            {% endif %}
+                        </article>
                     {% endfor %}
-                {% endblock %}
-                {% block footer %}
-                    {% component FormActions with { align: 'stretch' } %}
-                        {% block content %}
-                            <button
-                                type="button"
-                                data-ui-variant="ghost"
-                                data-action="click->privacy-settings-bundle--consent#closeDetails"
-                            >
-                                <span data-ui-part="label">Back</span>
-                            </button>
-                            {% component Button with { variant: 'primary' } %}
-                                {% block content %}Save settings{% endblock %}
-                            {% endcomponent %}
-                        {% endblock %}
-                    {% endcomponent %}
-                {% endblock %}
-            {% endcomponent %}
-        </section>
+                </div>
+
+                <div class="privacy-consent__details-actions" data-ui-role="form-actions">
+                    <div class="privacy-consent__details-actions-start">
+                        {% if imprintUrl %}
+                            <a href="{{ imprintUrl }}" class="privacy-consent__link">Imprint</a>
+                        {% endif %}
+                        {% if imprintUrl and privacyPolicyUrl %}
+                            <span class="privacy-consent__legal-sep" aria-hidden="true">|</span>
+                        {% endif %}
+                        {% if privacyPolicyUrl %}
+                            <a href="{{ privacyPolicyUrl }}" class="privacy-consent__link">Privacy policy</a>
+                        {% endif %}
+                    </div>
+                    <div class="privacy-consent__details-actions-end">
+                        <button
+                            type="button"
+                            data-ui-role="button"
+                            data-ui-variant="neutral"
+                            data-ui-appearance="outline"
+                            data-action="click->privacy-settings-bundle--consent#closeDetails"
+                        >
+                            <span data-ui-part="label">Back</span>
+                        </button>
+                        <button
+                            type="submit"
+                            data-ui-role="button"
+                            data-ui-variant="primary"
+                            data-ui-appearance="solid"
+                        >
+                            <span data-ui-part="label">Save settings</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
-{% endif %}

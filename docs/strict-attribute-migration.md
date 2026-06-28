@@ -1,30 +1,5 @@
 # Strict attribute migration guide
 
-This bundle intentionally supports only one markup contract:
+This page moved. See [Strict attribute policy](strict-attribute-policy.md).
 
-- Canonical attribute: `data-privacy-category`
-
-## Unsupported legacy aliases
-
-The following aliases are not tolerated and are always rejected:
-
-- `data-cookiecategory`
-- `data-cc`
-
-## Migration checklist
-
-1. Replace all legacy attributes with `data-privacy-category`.
-2. Run bundle unit/integration tests to verify forbidden aliases fail.
-3. Validate host templates do not mix canonical and forbidden attributes.
-4. Review [Usage](usage.md) and [Troubleshooting](troubleshooting.md) for forbidden alias examples.
-
-## See also
-
-- [Strict attribute contract](contracts/strict-attribute-contract.md)
-- [Reference](reference.md)
-
-## Non-goals
-
-- No compatibility mode for legacy aliases
-- No silent alias remapping
-- No downgrade path that weakens strict validation
+The bundle has always required `data-privacy-category`. Alternate names such as `data-cookiecategory` and `data-cc` were never supported — there is no migration path from a prior version of this bundle.

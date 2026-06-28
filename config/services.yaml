@@ -9,9 +9,18 @@ services:
       - '../src/DependencyInjection/'
       - '../src/PrivacySettingsBundle.php'
       - '../src/Controller/'
+      - '../src/Consent/CookiePreferenceStore.php'
+      - '../src/Consent/ConsentPreferenceCookieCodec.php'
+      - '../src/Consent/PendingConsentCookieRegistry.php'
 
   Symfinity\PrivacySettingsBundle\Controller\ConsentSubmitController:
     tags: ['controller.service_arguments']
 
-  Symfinity\PrivacySettingsBundle\Consent\PreferenceStoreInterface:
-    alias: Symfinity\PrivacySettingsBundle\Consent\SessionPreferenceStore
+  symfinity.privacy_settings.pending_cookie_registry:
+    class: Symfinity\PrivacySettingsBundle\Consent\PendingConsentCookieRegistry
+
+  Symfinity\PrivacySettingsBundle\Consent\PendingConsentCookieRegistry:
+    alias: symfinity.privacy_settings.pending_cookie_registry
+
+  Symfinity\PrivacySettingsBundle\EventSubscriber\ConsentCookieResponseSubscriber:
+    tags: ['kernel.event_subscriber']

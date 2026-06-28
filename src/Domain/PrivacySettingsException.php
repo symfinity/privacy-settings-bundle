@@ -45,4 +45,24 @@ final class PrivacySettingsException extends \InvalidArgumentException
     {
         return new self(sprintf('PRIVACY_REQUIRED_CATEGORY_DISABLED: "%s" cannot be disabled.', $id));
     }
+
+    public static function unsupportedMediaProvider(string $provider): self
+    {
+        return new self(sprintf('PRIVACY_UNSUPPORTED_MEDIA_PROVIDER: "%s" is not supported.', $provider));
+    }
+
+    public static function missingMediaEmbedField(string $field): self
+    {
+        return new self(sprintf('PRIVACY_MISSING_MEDIA_EMBED_FIELD: "%s" is required.', $field));
+    }
+
+    public static function invalidMediaEmbedId(string $field, string $value): self
+    {
+        return new self(sprintf('PRIVACY_INVALID_MEDIA_EMBED_ID: "%s" value "%s" is invalid.', $field, $value));
+    }
+
+    public static function invalidMediaEmbedUrl(string $url): self
+    {
+        return new self(sprintf('PRIVACY_INVALID_MEDIA_EMBED_URL: "%s" must be an absolute https URL.', $url));
+    }
 }

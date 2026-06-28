@@ -10,6 +10,8 @@ With Flex, the recipe registers the bundle and copies default category config.
 
 ## Configure categories
 
+The Flex recipe copies a **four-category** default (`required`, `analytics`, `marketing`, `media`). Adjust labels and descriptions for your policy; keep ids stable so stored consent and Twig gates stay aligned.
+
 ```yaml
 # config/packages/symfinity_privacy_settings.yaml
 symfinity_privacy_settings:
@@ -17,11 +19,22 @@ symfinity_privacy_settings:
         - id: required
           label: Required
           default_state: required
+          description: Essential cookies and storage for security, remembering your consent choices, and core site functionality. Always active.
         - id: analytics
           label: Analytics
           default_state: disabled
-          description: Optional usage analytics
+          description: Optional measurement of how the site is used — page views, performance, and errors — to help improve the experience.
+        - id: marketing
+          label: Marketing
+          default_state: disabled
+          description: Optional cookies for ad campaign measurement and showing related content on other websites.
+        - id: media
+          label: Media
+          default_state: disabled
+          description: Optional third-party embeds such as video and audio players, maps, widgets, and social media content.
 ```
+
+See [Configuration](configuration.md) for storage, enforcement, and `default_state` semantics.
 
 ## Symfony integration
 
@@ -34,6 +47,8 @@ symfinity_privacy_settings:
 ```
 
 `ConsentSubmitController` reads the posted `privacy[…]` fields, calls `PreferenceCaptureService`, and redirects back to the referer.
+
+The banner **records** choices. **v0.2** adds enforcement helpers — see [Enforcement](enforcement.md) for `privacy_consent()` and `PrivacyMediaEmbed`.
 
 ### React to consent changes
 
@@ -95,18 +110,40 @@ Requires `symfinity/ux-blocks-form`. Suggest `symfinity/ui-kernel` when your lay
 ```twig
 {# templates/base.html.twig #}
 {% block body %}
-    {{ component('ConsentBanner', { subjectKey: app.session.id }) }}
+    {{ component('ConsentBanner') }}
     {% block content %}{% endblock %}
 {% endblock %}
 ```
 
-Import glue CSS in your layout (AssetMapper):
+Omit `subjectKey` for anonymous visitors (`visitor` + signed consent cookie). Pass an explicit key when the subject is a logged-in account.
+
+## Gate integrations (v0.2)
+
+See **[Enforcement](enforcement.md)** for all Twig blocking methods (comparison table + examples).
 
 ```twig
-<link rel="stylesheet" href="{{ asset('privacy-settings-bundle/styles/privacy-settings-consent.css') }}">
+{# 1. Server-side if — scripts, pixels, sections, manual iframes #}
+{% if privacy_consent('analytics') %}
+    <script src="/assets/analytics.js" defer></script>
+{% endif %}
+
+{# 2. Media iframe — uses media category; facade + Load when denied #}
+<twig:PrivacyMediaEmbed provider="youtube" videoId="dQw4w9WgXcQ" title="Demo video" />
+
+{# 3. Marketing pixel (same pattern as analytics) #}
+{% if privacy_consent('marketing') %}
+    <img src="https://example.com/pixel.gif" alt="" width="1" height="1" hidden>
+{% endif %}
+
+{# 4. Declarative script (requires enforcement.client_scripts: true) #}
+<script type="text/plain" data-privacy-category="analytics" src="/assets/analytics.js"></script>
 ```
 
+`ConsentBanner` loads `privacy-settings-bundle/styles/privacy-settings-consent.css` automatically via AssetMapper — no `importmap.php` or `app.js` import required.
+
 ## Mark blocked assets
+
+Declare scripts or iframes that belong to a category. Prefer `privacy_consent()` for Twig snippets, or enable the opt-in unblocker — see [Enforcement](enforcement.md).
 
 ```twig
 <script type="text/plain" data-privacy-category="analytics" src="/assets/analytics.js"></script>

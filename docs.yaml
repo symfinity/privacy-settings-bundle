@@ -21,7 +21,7 @@ slices:
       - installation.md
       - quickstart.md
       - reference.md
-      - strict-attribute-migration.md
+      - strict-attribute-policy.md
       - troubleshooting.md
       - upgrade.md
       - usage.md

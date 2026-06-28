@@ -15,4 +15,4 @@ All notable changes to **symfinity/privacy-settings-bundle** are documented here
 
 ### Policy
 
-- No legacy alias compatibility (`data-cookiecategory`, `data-cc`)
+- Alternate attribute names rejected (`data-cookiecategory`, `data-cc` never supported)

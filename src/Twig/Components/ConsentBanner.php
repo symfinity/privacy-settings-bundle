@@ -15,8 +15,12 @@ use Symfony\UX\TwigComponent\Attribute\ExposeInTemplate;
 #[AsTwigComponent('ConsentBanner', template: '@SymfinityPrivacySettings/components/ConsentBanner.html.twig')]
 final class ConsentBanner
 {
-    /** @var 'modal'|'bottom'|'sheet' */
-    public string $position = 'modal';
+    /** @deprecated Layout is fixed: quick bottom-right, details centered. Kept for BC only. */
+    public string $position = 'corner';
+
+    public ?string $privacyPolicyUrl = null;
+
+    public ?string $imprintUrl = null;
 
     private string $subjectKey = 'visitor';
 
@@ -35,13 +39,21 @@ final class ConsentBanner
         /** @var list<array{id: string, label: string, default_state: string, description?: string}> */
         #[Autowire(param: 'symfinity.privacy_settings.categories')]
         private readonly array $rawCategories,
+        #[Autowire(param: 'symfinity.privacy_settings.enforcement.client_scripts')]
+        private readonly bool $clientScriptsEnabled,
     ) {
     }
 
-    public function mount(string $subjectKey = 'visitor', string $position = 'modal'): void
-    {
-        $this->subjectKey = '' !== trim($subjectKey) ? trim($subjectKey) : 'visitor';
-        $this->position = \in_array($position, ['modal', 'bottom', 'sheet'], true) ? $position : 'modal';
+    public function mount(
+        ?string $subjectKey = null,
+        string $position = 'corner',
+        ?string $privacyPolicyUrl = null,
+        ?string $imprintUrl = null,
+    ): void {
+        $this->subjectKey = $this->resolveSubjectKey($subjectKey);
+        $this->position = \in_array($position, ['modal', 'bottom', 'sheet', 'corner'], true) ? $position : 'corner';
+        $this->privacyPolicyUrl = $this->normalizeOptionalUrl($privacyPolicyUrl);
+        $this->imprintUrl = $this->normalizeOptionalUrl($imprintUrl);
         $this->categories = $this->normalizer->normalize($this->rawCategories);
         $this->choices = $this->restoreService->effectiveChoices($this->subjectKey, $this->categories);
         $this->needsConsent = !$this->restoreService->hasStoredDecision($this->subjectKey);
@@ -89,5 +101,45 @@ final class ConsentBanner
         return $this->urlGenerator->generate('symfinity_privacy_settings_consent_submit', [
             'subjectKey' => $this->subjectKey,
         ]);
+    }
+
+    #[ExposeInTemplate('privacyPolicyUrl')]
+    public function exposedPrivacyPolicyUrl(): ?string
+    {
+        return $this->privacyPolicyUrl;
+    }
+
+    #[ExposeInTemplate('imprintUrl')]
+    public function exposedImprintUrl(): ?string
+    {
+        return $this->imprintUrl;
+    }
+
+    #[ExposeInTemplate('clientScriptsEnabled')]
+    public function exposedClientScriptsEnabled(): bool
+    {
+        return $this->clientScriptsEnabled;
+    }
+
+    private function normalizeOptionalUrl(?string $url): ?string
+    {
+        if (null === $url) {
+            return null;
+        }
+
+        $url = trim($url);
+
+        return '' === $url ? null : $url;
+    }
+
+    private function resolveSubjectKey(?string $subjectKey): string
+    {
+        if (null !== $subjectKey && '' !== trim($subjectKey)) {
+            return trim($subjectKey);
+        }
+
+        // Anonymous consent is scoped by the signed consent cookie (CookiePreferenceStore),
+        // not by embedding the session id in the subject key.
+        return 'visitor';
     }
 }

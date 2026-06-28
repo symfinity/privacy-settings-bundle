@@ -20,7 +20,7 @@
 
 ## Features
 
-- **Canonical attribute** — `data-privacy-category` only; rejects legacy aliases
+- **Canonical attribute** — `data-privacy-category` only; rejects alternate names (`data-cookiecategory`, `data-cc`)
 - **Consent services** — capture, restore, and store port with events
 - **ConsentBanner UI** — composes `symfinity/ux-blocks-form` roles + glue CSS
 - **Flex recipe** — bundle registration and default categories on install

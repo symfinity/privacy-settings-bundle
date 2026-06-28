@@ -6,9 +6,9 @@
 
 Privacy runtime declarations must use canonical strict attributes defined by this bundle. Attribute aliasing is not supported.
 
-## Forbidden legacy aliases
+## Forbidden attribute names
 
-The following attributes are explicitly forbidden and must be rejected:
+The following names are explicitly forbidden and must be rejected. They were never supported by this bundle; they may appear in third-party consent snippets:
 
 - `data-cookiecategory`
 - `data-cc`
@@ -19,8 +19,8 @@ The following attributes are explicitly forbidden and must be rejected:
 |------|---------|
 | Canonical attribute declaration | Accepted and evaluated |
 | Unknown privacy attribute | Rejected with deterministic validation error |
-| `data-cookiecategory` or `data-cc` present | Rejected as forbidden legacy alias |
-| Mixed canonical + forbidden legacy on same declaration | Rejected |
+| `data-cookiecategory` or `data-cc` present | Rejected as forbidden attribute name |
+| Mixed canonical + forbidden name on same declaration | Rejected |
 
 ## Error contract
 

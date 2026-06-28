@@ -28,7 +28,7 @@ Define deterministic behavior from visitor action to persisted preference state 
 | Failure | Expected behavior |
 |--------|-------------------|
 | Invalid payload shape | Reject write, keep previous state, emit validation error |
-| Forbidden legacy attribute declaration detected | Reject declaration path and emit strict attribute error |
+| Forbidden attribute name detected (`data-cookiecategory`, `data-cc`) | Reject declaration path and emit strict attribute error |
 | Persistence adapter unavailable | Fail safely, keep runtime non-activating for optional categories |
 | Divergence between stored state and current config | Ignore unknown categories, emit divergence event, continue safely |
 

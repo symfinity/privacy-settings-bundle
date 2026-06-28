@@ -26,7 +26,6 @@ final class ConsentBannerRenderTest extends KernelTestCase
 
         self::assertStringContainsString('data-privacy-consent', $html);
         self::assertStringContainsString('privacy-consent__backdrop', $html);
-        self::assertStringContainsString('data-ui-role="field"', $html);
         self::assertStringContainsString('data-ui-role="form-actions"', $html);
         self::assertStringContainsString('name="privacy[analytics]"', $html);
         self::assertStringContainsString('Accept all', $html);
@@ -34,5 +33,8 @@ final class ConsentBannerRenderTest extends KernelTestCase
         self::assertStringContainsString('Manage settings', $html);
         self::assertStringContainsString('Save settings', $html);
         self::assertStringContainsString('data-controller="privacy-settings-bundle--consent"', $html);
+        self::assertStringContainsString('privacy-settings-bundle/styles/privacy-settings-consent', $html);
+        self::assertStringContainsString('type="submit"', $html);
+        self::assertStringContainsString('data-turbo="false"', $html);
     }
 }

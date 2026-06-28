@@ -23,7 +23,7 @@ The `0.1` recipe:
 1. Registers `PrivacySettingsBundle` in `config/bundles.php`
 2. Copies `config/packages/symfinity_privacy_settings.yaml` from the package
 3. Copies `config/routes/symfinity_privacy_settings.yaml` (consent submit POST route)
-4. Seeds default `required` and `analytics` categories
+4. Seeds the default four categories (`required`, `analytics`, `marketing`, `media`) — see [Configuration](configuration.md)
 
 Ensure `symfinity/ux-blocks-form` is installed (Composer resolves it automatically). Run the ux-blocks-form recipe first if your project does not yet use form-tier components.
 

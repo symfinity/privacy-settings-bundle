@@ -6,11 +6,12 @@
 
 | Area | Summary |
 |------|---------|
-| Configuration | Declarative `symfinity_privacy_settings.categories` model |
-| Consent | Capture, restore, and in-memory store port |
-| Markup | Canonical `data-privacy-category` with forbidden legacy aliases |
+| Configuration | Declarative `symfinity_privacy_settings.categories` model (default four categories) |
+| Consent | Capture, restore, store port, and `ConsentDecisionEvent` — **adopters wire enforcement** |
+| Markup | Canonical `data-privacy-category` only — alternate names rejected |
 | Events | `ConsentDecisionEvent` on preference changes |
 | Consent UI | `ConsentBanner` Twig component + glue CSS |
+| Enforcement (v0.2) | `privacy_consent()`, `PrivacyMediaEmbed`, opt-in script unblocker — [Enforcement](enforcement.md) |
 
 ## Handbook
 
@@ -18,9 +19,10 @@
 - [Quickstart](quickstart.md)
 - [Configuration](configuration.md)
 - [Usage](usage.md)
+- **[Enforcement — block integrations in Twig](enforcement.md)**
 - [Verification](verification.md)
 - [Upgrade](upgrade.md)
 - [Troubleshooting](troubleshooting.md)
 - [Reference](reference.md)
-- [Strict attribute migration](strict-attribute-migration.md)
+- [Strict attribute policy](strict-attribute-policy.md)
 - [Contracts](contracts/strict-attribute-contract.md)

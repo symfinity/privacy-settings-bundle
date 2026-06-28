@@ -1,0 +1,56 @@
+<link rel="stylesheet" href="{{ asset('privacy-settings-bundle/styles/privacy-settings-media.css') }}">
+
+{% if mediaAllowed %}
+    <div
+        class="privacy-media-embed privacy-media-embed--passthrough"
+        style="--privacy-media-aspect-ratio: {{ aspectRatio }}"
+    >
+        <iframe
+            class="privacy-media-embed__iframe"
+            src="{{ resolvedEmbedUrl }}"
+            title="{{ title }}"
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+        ></iframe>
+    </div>
+{% else %}
+    <div
+        class="privacy-media-embed privacy-media-embed--facade"
+        style="--privacy-media-aspect-ratio: {{ aspectRatio }}"
+        data-controller="privacy-settings-bundle--media-embed"
+        data-privacy-settings-bundle--media-embed-embed-id-value="{{ embedId }}"
+        data-privacy-settings-bundle--media-embed-src-value="{{ resolvedEmbedUrl }}"
+        data-privacy-settings-bundle--media-embed-title-value="{{ title }}"
+    >
+        <div class="privacy-media-embed__facade" data-privacy-settings-bundle--media-embed-target="facade">
+            <p class="privacy-media-embed__message">
+                This content is hosted by a third party. Loading it may share data with external providers.
+            </p>
+            <div class="privacy-media-embed__actions" data-ui-role="form-actions">
+                <button
+                    type="button"
+                    class="privacy-media-embed__load"
+                    data-ui-role="button"
+                    data-ui-variant="primary"
+                    data-ui-appearance="solid"
+                    data-action="click->privacy-settings-bundle--media-embed#loadEmbed"
+                >
+                    <span data-ui-part="label">Load</span>
+                </button>
+                <button
+                    type="button"
+                    class="privacy-media-embed__settings"
+                    data-ui-role="button"
+                    data-ui-variant="neutral"
+                    data-ui-appearance="outline"
+                    data-action="click->privacy-settings-bundle--media-embed#openCookieSettings"
+                >
+                    <span data-ui-part="label">Cookie settings</span>
+                </button>
+            </div>
+        </div>
+        <div class="privacy-media-embed__frame" hidden data-privacy-settings-bundle--media-embed-target="frame"></div>
+    </div>
+{% endif %}

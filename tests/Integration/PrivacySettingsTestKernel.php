@@ -22,7 +22,7 @@ use Symfony\UX\TwigComponent\TwigComponentBundle;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
-final class PrivacySettingsTestKernel extends Kernel
+class PrivacySettingsTestKernel extends Kernel
 {
     use MicroKernelTrait;
 
@@ -53,6 +53,9 @@ final class PrivacySettingsTestKernel extends Kernel
     protected function configureContainer(ContainerConfigurator $container): void
     {
         $container->extension('symfinity_privacy_settings', [
+            'enforcement' => [
+                'client_scripts' => false,
+            ],
             'categories' => [
                 [
                     'id' => 'required',
@@ -64,6 +67,12 @@ final class PrivacySettingsTestKernel extends Kernel
                     'label' => 'Analytics',
                     'default_state' => 'disabled',
                     'description' => 'Optional analytics',
+                ],
+                [
+                    'id' => 'media',
+                    'label' => 'Media',
+                    'default_state' => 'disabled',
+                    'description' => 'Embedded media',
                 ],
             ],
         ]);
@@ -85,6 +94,7 @@ final class PrivacySettingsTestKernel extends Kernel
         $container->extension('framework', [
             'secret' => 'test-secret',
             'test' => true,
+            'assets' => [],
             'router' => ['utf8' => true],
             'php_errors' => ['log' => false],
             'form' => ['enabled' => true],
@@ -97,6 +107,9 @@ final class PrivacySettingsTestKernel extends Kernel
 
         $container->extension('twig', [
             'form_themes' => ['form_div_layout.html.twig'],
+            'paths' => [
+                \dirname(__DIR__) . '/Integration/templates' => 'IntegrationTest',
+            ],
         ]);
 
         $container->services()

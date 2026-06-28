@@ -1,12 +1,16 @@
 <?php
 
 /**
- * Privacy settings consent glue CSS — import in host layout when rendering ConsentBanner.
+ * Optional importmap entry when importing consent CSS from app.js.
+ * ConsentBanner auto-loads this file via asset() — consumers do not need importmap wiring.
  */
 return [
-    'privacy-settings-bundle/consent' => [
+    'privacy-settings-bundle/styles/privacy-settings-consent.css' => [
         'path' => './assets/styles/privacy-settings-consent.css',
         'type' => 'css',
-        'entrypoint' => true,
+    ],
+    'privacy-settings-bundle/styles/privacy-settings-media.css' => [
+        'path' => './assets/styles/privacy-settings-media.css',
+        'type' => 'css',
     ],
 ];

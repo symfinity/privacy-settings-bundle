@@ -4,14 +4,14 @@
 
 First public release with:
 
-- Strict `data-privacy-category` policy (no legacy alias support)
+- Strict `data-privacy-category` policy (no alternate attribute names)
 - Consent capture/restore services and in-memory store
 - Flex `0.1` recipe
 - Form-tier `ConsentBanner` UI
 
 ### Breaking policy
 
-There is **no** migration path from legacy cookie attributes. Replace forbidden aliases before upgrading — see [strict-attribute-migration](strict-attribute-migration.md).
+Alternate attribute names (`data-cookiecategory`, `data-cc`) were never supported. Use `data-privacy-category` from the start — see [strict attribute policy](strict-attribute-policy.md).
 
 ### From unreleased dev snapshots
 
