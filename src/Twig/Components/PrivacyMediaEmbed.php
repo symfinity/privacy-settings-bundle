@@ -130,9 +130,6 @@ final class PrivacyMediaEmbed
         return 'visitor';
     }
 
-    /**
-     * @return 'youtube'|'vimeo'|'google_maps'|'generic'
-     */
     private function normalizeAspectRatio(string $aspectRatio): string
     {
         $aspectRatio = trim($aspectRatio);
@@ -147,6 +144,9 @@ final class PrivacyMediaEmbed
         return '16 / 9';
     }
 
+    /**
+     * @return 'youtube'|'vimeo'|'google_maps'|'generic'
+     */
     private function normalizeProvider(string $provider): string
     {
         if (!in_array($provider, [
