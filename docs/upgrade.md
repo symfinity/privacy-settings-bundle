@@ -1,5 +1,13 @@
 # Upgrade and migration
 
+## 0.2.2 (patch)
+
+Split mirror hygiene — CI, funding metadata, and removal of the internal `docs.yaml` compile manifest. No consent API or config changes.
+
+```bash
+composer update symfinity/privacy-settings-bundle:^0.2.2
+```
+
 ## 0.2.1 (patch)
 
 Bugfix release for **PrivacyMediaEmbed** — **Load** unlock and embed sizing. No config or recipe changes.

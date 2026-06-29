@@ -10,6 +10,7 @@
 [![CI](https://github.com/symfinity/privacy-settings-bundle/actions/workflows/ci.yml/badge.svg)](https://github.com/symfinity/privacy-settings-bundle/actions/workflows/ci.yml)
 <br/>
 [![Release](https://img.shields.io/packagist/v/symfinity/privacy-settings-bundle.svg?style=flat&logo=packagist&logoColor=white)](https://packagist.org/packages/symfinity/privacy-settings-bundle)
+[![Downloads](https://img.shields.io/packagist/dt/symfinity/privacy-settings-bundle.svg?style=flat&logo=packagist&logoColor=white)](https://packagist.org/packages/symfinity/privacy-settings-bundle)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 
 </div>

@@ -5,6 +5,29 @@ All notable changes to **symfinity/privacy-settings-bundle** are documented here
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.2] - 2026-06-29
+
+Patch release after [v0.2.1](https://github.com/symfinity/privacy-settings-bundle/releases/tag/v0.2.1). Split mirror maintenance — no consent API, enforcement helpers, or configuration changes.
+
+### Removed
+
+- **`docs.yaml`** — internal handbook compile manifest (split mirror ships `docs/` directly)
+
+### Changed
+
+- **Split mirror CI** — Composer package cache and `GITHUB_TOKEN` authentication so GitHub Actions reliably resolves `symfinity/*` dependencies across the PHP × Symfony matrix
+- **README** — Packagist downloads badge alongside the release badge
+
+### Added
+
+- Composer **`funding`** metadata for [GitHub Sponsors](https://github.com/sponsors/serotoninja)
+- **`.github/FUNDING.yml`** — GitHub Sponsors link on the split mirror repository
+
+### Notes
+
+- No Twig function names, `symfinity_privacy_settings` keys, or Flex recipe changes since v0.2.1
+- `composer update symfinity/privacy-settings-bundle` is sufficient; no template or YAML migrations
+
 ## [0.2.1] - 2026-06-29
 
 ### Fixed
