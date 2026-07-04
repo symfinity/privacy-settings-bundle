@@ -43,3 +43,14 @@ symfinity_privacy_settings:
             label: Media
             default_state: disabled
             description: Optional third-party embeds such as video and audio players, maps, widgets, and social media content.
+
+# Maintainer smoke route — not for production consumer apps.
+when@dev:
+    symfinity_privacy_settings:
+        demo:
+            route_enabled: true
+
+when@test:
+    symfinity_privacy_settings:
+        demo:
+            route_enabled: true

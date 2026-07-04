@@ -17,6 +17,54 @@
     color: var(--privacy-consent-text);
 }
 
+/* OOTB ux-blocks button tokens when symfinity/ui-kernel is absent (P2 embed).
+   Higher-specificity + var(..., fallback) so themed apps still inherit kernel tokens. */
+:is([data-privacy-consent], .privacy-media-embed) [data-ui-role='button'] {
+    box-sizing: border-box;
+    margin: 0;
+    appearance: none;
+    -webkit-appearance: none;
+    border-radius: var(--ui-radius-md, 0.375rem);
+    padding: var(--ui-space-sm, 0.5rem) var(--ui-space-md, 0.75rem);
+    font-family: var(--ui-font-family-sans, system-ui, sans-serif);
+    font-size: var(--ui-font-size-md, 0.875rem);
+    line-height: 1.25;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--ui-space-xs, 0.25rem);
+}
+
+:is([data-privacy-consent], .privacy-media-embed) [data-ui-role='button'] [data-ui-part='label'] {
+    display: inline-flex;
+    align-items: center;
+    line-height: 1.25;
+}
+
+:is([data-privacy-consent], .privacy-media-embed) [data-ui-role='button'][data-ui-variant='primary'][data-ui-appearance='solid'] {
+    background: var(--ui-color-primary, #5eead4);
+    color: var(--ui-color-on-primary, #0b1218);
+    border: 1px solid var(--ui-color-primary, #5eead4);
+}
+
+:is([data-privacy-consent], .privacy-media-embed) [data-ui-role='button'][data-ui-variant='secondary'][data-ui-appearance='solid'] {
+    background: var(--ui-color-secondary, #64748b);
+    color: var(--ui-color-on-secondary, #f8fafc);
+    border: 1px solid var(--ui-color-secondary, #64748b);
+}
+
+:is([data-privacy-consent], .privacy-media-embed) [data-ui-role='button'][data-ui-variant='neutral'][data-ui-appearance='outline'] {
+    background: transparent;
+    color: var(--ui-color-neutral, #e2e8f0);
+    border: 1px solid var(--ui-color-neutral, #94a3b8);
+}
+
+:is([data-privacy-consent], .privacy-media-embed) [data-ui-role='button']:focus-visible {
+    outline: 2px solid var(--ui-color-primary, #5eead4);
+    outline-offset: 2px;
+}
+
 [data-privacy-consent] .visually-hidden {
     position: absolute;
     width: 1px;

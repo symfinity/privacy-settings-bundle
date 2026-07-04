@@ -24,3 +24,16 @@ services:
 
   Symfinity\PrivacySettingsBundle\EventSubscriber\ConsentCookieResponseSubscriber:
     tags: ['kernel.event_subscriber']
+
+  Symfinity\PrivacySettingsBundle\Twig\PrivacySettingsUiAssetsRenderer:
+    arguments:
+      $coreCssProvider: '@?Symfinity\UxBlocksCore\Css\BlocksCoreCssProvider'
+      $formCssProvider: '@?Symfinity\UxBlocksForm\Css\BlocksFormCssProvider'
+
+  Symfinity\PrivacySettingsBundle\Twig\PrivacySettingsUiAssetsExtension:
+    tags: ['twig.extension']
+
+  Symfinity\PrivacySettingsBundle\Routing\PrivacyDemoRouteLoader:
+    arguments:
+      $routeEnabled: '%symfinity.privacy_settings.demo.route_enabled%'
+    tags: ['routing.loader']

@@ -17,17 +17,22 @@
 
 Renders a modal consent surface (backdrop + two-step flow: quick accept/reject, then optional per-category settings) composing ux-blocks-form `Form`, `Field`, `Switch`/`Checkbox`, `FormActions`, and core `Button`.
 
+**Twig syntax (equivalent):** use the tag form (same style as `<twig:PrivacyMediaEmbed … />`) or Symfony's `component()` helper — both invoke `#[AsTwigComponent('ConsentBanner')]`.
+
 ```twig
-{{ component('ConsentBanner', {
-    subjectKey: 'visitor-123',
-    position: 'bottom'
-}) }}
+{# Tag syntax (recommended in layouts) #}
+<twig:ConsentBanner subjectKey="visitor-123" />
+
+{# Function syntax — same component, same props #}
+{{ component('ConsentBanner', { subjectKey: 'visitor-123' }) }}
 ```
 
 | Prop | Default | Description |
 |------|---------|-------------|
 | `subjectKey` | `visitor` | Logical key for capture/restore; anonymous defaults use the signed consent cookie — do not pass `app.session.id` |
-| `position` | `modal` | `modal` (backdrop dialog), `bottom`, or `sheet` layout variant |
+| `privacyPolicyUrl` | — | Optional absolute URL for the privacy policy link |
+| `imprintUrl` | — | Optional absolute URL for an imprint/legal notice link |
+| `position` | `corner` | Deprecated layout hint; layout is fixed in current releases |
 
 Submit posts to `/_privacy/consent/{subjectKey}` (bundle route) and calls `PreferenceCaptureService`.
 
@@ -37,7 +42,7 @@ When `symfinity/ui-kernel` is installed, place the banner inside your themed bas
 
 ```twig
 <body data-theme="default">
-    {{ component('ConsentBanner') }}
+    <twig:ConsentBanner />
     {% block content %}{% endblock %}
 </body>
 ```

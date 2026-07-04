@@ -1,5 +1,7 @@
 # Verification
 
+**Integration profile:** P2 — embed (ConsentBanner + auto glue CSS).
+
 ## Package tests
 
 From the package directory:
@@ -33,28 +35,55 @@ Run the integration render test:
 ./bin/php vendor/bin/phpunit packages/privacy-settings-bundle/tests/Integration/ConsentBannerRenderTest.php
 ```
 
-Or embed `ConsentBanner` in a Twig template and confirm `data-ui-role` markers for form atoms appear in HTML.
+Or embed `<twig:ConsentBanner />` (or `{{ component('ConsentBanner') }}`) in a Twig template and confirm `data-ui-role` markers for form atoms appear in HTML.
 
-## Clean-app Flex smoke (MUST before public tag)
+## Clean-app smoke
 
-Org contract: **v0.1.0 consumer experience gate** — integration profile **P2** (embed). See symfinity monorepo `_org/contracts/v0.1.0-consumer-experience-gate.md`.
-
-From org checkout (Flex endpoint + recipe assert):
-
-```bash
-make dogfood-new PACKAGE=symfinity/privacy-settings-bundle SLUG=privacy-settings-cx-smoke VERSION='7.4.*' FORCE=1
-# expect stdout: recipe: applied (symfinity/privacy-settings-bundle)
-make dogfood-serve SLUG=privacy-settings-cx-smoke
-```
-
-In a fresh Symfony app with only the symfinity/recipes endpoint (no path repos):
+On a fresh Symfony 7.4+ project:
 
 ```bash
 composer require symfinity/privacy-settings-bundle
 php bin/console debug:config symfinity_privacy_settings
 ```
 
-Confirm default categories are present without hand-editing YAML. For visible UI, follow [Quickstart](quickstart.md) embed steps — v0.1.0 **must** classify those as customization or automate embed per consumer gate **G5**.
+Embed `<twig:ConsentBanner />` in your layout — expect `data-privacy-consent`, form atom `data-ui-role` markers, and `id="ux-blocks-core-css"` / `id="ux-blocks-form-css"` (auto-injected glue CSS). Demo route `/_privacy/demo` is **dev/test only** (`demo.route_enabled: false` in prod).
+
+Org maintainer dogfood (recipe assert):
+
+```bash
+make dogfood-new PACKAGE=symfinity/privacy-settings-bundle SLUG=privacy-settings-cx-smoke VERSION='7.4.*' FORCE=1
+make dogfood-serve SLUG=privacy-settings-cx-smoke
+```
+
+## Clean-app Flex smoke (maintainers)
+
+Integration profile **P2** (embed): layout embed + auto-injected ux-blocks CSS; demo route dev/test only.
+
+From org checkout (Flex endpoint + recipe assert; **dev** env — demo route enabled via `when@dev`):
+
+```bash
+make dogfood-new PACKAGE=symfinity/privacy-settings-bundle SLUG=privacy-settings-cx-smoke VERSION='7.4.*' FORCE=1
+# expect stdout: recipe: applied (symfinity/privacy-settings-bundle)
+make dogfood-serve SLUG=privacy-settings-cx-smoke
+curl -sI http://127.0.0.1:<port>/_privacy/demo | grep '200'   # dev/test only
+```
+
+In a fresh Symfony app with only the symfinity/recipes endpoint (no path repos), **production** smoke uses layout embed + render test — demo route **MUST NOT** respond in `APP_ENV=prod`:
+
+```bash
+composer require symfinity/privacy-settings-bundle
+php bin/console debug:config symfinity_privacy_settings
+php bin/console debug:router symfinity_privacy_settings_demo 2>&1 | grep -q 'does not exist'  # prod: no demo route
+./bin/php vendor/bin/phpunit packages/privacy-settings-bundle/tests/Integration/ConsentBannerRenderTest.php
+```
+
+Dev maintainer check (optional):
+
+```bash
+curl -sI http://127.0.0.1:8000/_privacy/demo | grep '200'
+```
+
+Confirm default categories are present without hand-editing YAML. In dev, the demo page contains `data-privacy-consent` and `id="ux-blocks-core-css"`.
 
 ## Recipe validation (maintainers)
 

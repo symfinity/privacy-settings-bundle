@@ -74,6 +74,10 @@ final class PrivacySettingsExtension extends Extension implements PrependExtensi
             'symfinity.privacy_settings.enforcement.client_scripts',
             $config['enforcement']['client_scripts'],
         );
+        $container->setParameter(
+            'symfinity.privacy_settings.demo.route_enabled',
+            $config['demo']['route_enabled'],
+        );
 
         $driver = $config['storage']['driver'];
         $container->setParameter('symfinity.privacy_settings.storage.driver', $driver);

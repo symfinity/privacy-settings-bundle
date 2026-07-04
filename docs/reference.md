@@ -29,6 +29,7 @@ Registered by `PrivacyConsentExtension`. Full examples: [Enforcement](enforcemen
 
 | Function / component | Returns / output | Blocks via |
 |---------------------|------------------|------------|
+| `<twig:ConsentBanner … />` / `component('ConsentBanner', …)` | HTML consent UI | Capture only — wire [Enforcement](enforcement.md) separately |
 | `privacy_consent(categoryId, subjectKey?)` | `bool` | Server omits `{% if %}` branch when `false` |
 | `privacy_effective_choices(subjectKey?)` | `array<string, bool>` | Server branches on map; optional JSON for custom JS |
 | `<twig:PrivacyMediaEmbed … />` | HTML (iframe or facade) | Server passthrough; client **Load** is page-local |

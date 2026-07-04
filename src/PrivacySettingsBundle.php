@@ -6,6 +6,7 @@ namespace Symfinity\PrivacySettingsBundle;
 
 use Symfony\Bundle\TwigBundle\DependencyInjection\Configurator\TwigConfigurator;
 use Symfinity\PrivacySettingsBundle\DependencyInjection\Compiler\AppendStimulusControllerPathPass;
+use Symfinity\PrivacySettingsBundle\DependencyInjection\Compiler\RegisterPrivacyDemoControllerPass;
 use Symfinity\PrivacySettingsBundle\DependencyInjection\PrivacySettingsExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
@@ -22,6 +23,7 @@ final class PrivacySettingsBundle extends Bundle
     {
         parent::build($container);
         $container->addCompilerPass(new AppendStimulusControllerPathPass($this->getPath().'/assets/controllers'));
+        $container->addCompilerPass(new RegisterPrivacyDemoControllerPass());
     }
 
     public function getContainerExtension(): ExtensionInterface

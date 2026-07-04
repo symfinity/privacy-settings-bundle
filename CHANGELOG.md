@@ -5,6 +5,29 @@ All notable changes to **symfinity/privacy-settings-bundle** are documented here
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.3] - 2026-07-05
+
+Patch release after [v0.2.2](https://github.com/symfinity/privacy-settings-bundle/releases/tag/v0.2.2). **P2 out-of-the-box embed** — ConsentBanner and PrivacyMediaEmbed ship styled without manual ux-blocks CSS wiring.
+
+### Added
+
+- **Auto-injected ux-blocks CSS** — `ConsentBanner` and `PrivacyMediaEmbed` emit inline `#ux-blocks-core-css` and `#ux-blocks-form-css` once per request when tier CSS providers are present
+- **OOTB button token fallbacks** in consent glue CSS — usable consent buttons when `symfinity/ui-kernel` is not installed (`var(--ui-*, fallback)` preserves kernel tokens in themed apps)
+- **`privacy_settings_ui_assets()`** Twig function — internal partial hook; consumers embed components only
+- **`demo.route_enabled`** config — optional `GET /_privacy/demo` maintainer smoke page; enabled by default only in `dev`/`test` via shipped `when@dev` / `when@test` config
+
+### Changed
+
+- **Consumer route file** — `config/routes/symfinity_privacy_settings.yaml` imports bundle consent routes and optional demo loader (re-merge on upgrade if POST consent breaks)
+- **Handbook** — production quickstart with `<twig:ConsentBanner />`, verification clean-app smoke for auto CSS, `demo.route_enabled` documented in [configuration](docs/configuration.md)
+- **PHPUnit bootstrap** — simplified monorepo vs split-mirror autoload resolution
+
+### Notes
+
+- No changes to `privacy_consent()`, `PrivacyMediaEmbed` props, category ids, or Flex `^0.1` recipe constraint
+- Keep `demo.route_enabled: false` in production — embed the banner in your layout instead
+- `composer update symfinity/privacy-settings-bundle:^0.2.3` is sufficient when route YAML is already recipe-managed; see [upgrade.md](docs/upgrade.md)
+
 ## [0.2.2] - 2026-06-29
 
 Patch release after [v0.2.1](https://github.com/symfinity/privacy-settings-bundle/releases/tag/v0.2.1). Split mirror maintenance — no consent API, enforcement helpers, or configuration changes.

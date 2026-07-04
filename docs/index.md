@@ -1,3 +1,7 @@
+---
+integration_profile: P2
+---
+
 # Overview
 
 `symfinity/privacy-settings-bundle` provides a strict privacy category model, consent capture and restore services, template attribute validation, and a form-tier **ConsentBanner** UI composed from `symfinity/ux-blocks-form`.

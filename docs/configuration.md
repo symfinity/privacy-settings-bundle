@@ -70,6 +70,7 @@ symfinity_privacy_settings:
 | `categories[].default_state` | enum | `disabled` | One of `required`, `enabled`, `disabled` |
 | `categories[].description` | string | `''` | Optional helper text in ConsentBanner |
 | `enforcement.client_scripts` | bool | `false` | Enables client unblocker for [declarative script tags](enforcement.md#4-data-privacy-category--opt-in-client-unblocker) only — does not affect `privacy_consent()` or `PrivacyMediaEmbed` |
+| `demo.route_enabled` | bool | `false` | When true, registers `GET /_privacy/demo` (maintainer smoke). Enabled by default only in `dev`/`test` via shipped config — keep `false` in production |
 
 ## `default_state` semantics
 

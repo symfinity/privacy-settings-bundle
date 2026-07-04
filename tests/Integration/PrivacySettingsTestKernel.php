@@ -53,6 +53,9 @@ class PrivacySettingsTestKernel extends Kernel
     protected function configureContainer(ContainerConfigurator $container): void
     {
         $container->extension('symfinity_privacy_settings', [
+            'demo' => [
+                'route_enabled' => true,
+            ],
             'enforcement' => [
                 'client_scripts' => false,
             ],
@@ -136,5 +139,6 @@ class PrivacySettingsTestKernel extends Kernel
     protected function configureRoutes(\Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator $routes): void
     {
         $routes->import($this->getProjectDir() . '/config/routes.yaml');
+        $routes->import('.', 'privacy_settings_demo');
     }
 }

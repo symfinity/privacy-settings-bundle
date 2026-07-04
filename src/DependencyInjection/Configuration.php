@@ -11,6 +11,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  * @phpstan-type PrivacySettingsConfig array{
  *     categories: list<array{id: string, label: string, default_state: string, description?: string}>,
  *     enforcement: array{client_scripts: bool},
+ *     demo: array{route_enabled: bool},
  *     storage: array{
  *         driver: 'cookie'|'session',
  *         cookie: array{
@@ -72,6 +73,15 @@ final class Configuration implements ConfigurationInterface
                     ->children()
                         ->booleanNode('client_scripts')
                             ->defaultFalse()
+                        ->end()
+                    ->end()
+                ->end()
+                ->arrayNode('demo')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->booleanNode('route_enabled')
+                            ->defaultFalse()
+                            ->info('When true, registers GET /_privacy/demo (maintainer smoke). Default off; enable in dev/test only.')
                         ->end()
                     ->end()
                 ->end()

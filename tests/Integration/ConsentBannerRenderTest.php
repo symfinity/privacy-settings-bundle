@@ -34,6 +34,8 @@ final class ConsentBannerRenderTest extends KernelTestCase
         self::assertStringContainsString('Save settings', $html);
         self::assertStringContainsString('data-controller="privacy-settings-bundle--consent"', $html);
         self::assertStringContainsString('privacy-settings-bundle/styles/privacy-settings-consent', $html);
+        self::assertStringContainsString('id="ux-blocks-core-css"', $html);
+        self::assertStringContainsString('id="ux-blocks-form-css"', $html);
         self::assertStringContainsString('type="submit"', $html);
         self::assertStringContainsString('data-turbo="false"', $html);
     }

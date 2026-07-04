@@ -1,5 +1,15 @@
 # Upgrade and migration
 
+## 0.2.3 (patch)
+
+P2 out-of-the-box embed — auto-injected ux-blocks CSS on `ConsentBanner` / `PrivacyMediaEmbed`, OOTB button fallbacks without ui-kernel, and optional dev/test demo route. No consent API or category config changes.
+
+```bash
+composer update symfinity/privacy-settings-bundle:^0.2.3
+```
+
+If consent POST fails after upgrade, diff your `config/routes/symfinity_privacy_settings.yaml` against the package default — it should import `@PrivacySettingsBundle/config/routes.yaml` and the demo loader. Production apps must keep `demo.route_enabled: false` (default).
+
 ## 0.2.2 (patch)
 
 Split mirror hygiene — CI, funding metadata, and removal of the internal `docs.yaml` compile manifest. No consent API or config changes.

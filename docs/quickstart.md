@@ -6,7 +6,23 @@
 composer require symfinity/privacy-settings-bundle
 ```
 
-With Flex, the recipe registers the bundle and copies default category config.
+With Flex, the recipe registers the bundle, copies default category config, and wires the consent submit route.
+
+## Embed ConsentBanner (production)
+
+Add the banner to your existing layout — one component line; CSS is injected automatically:
+
+```twig
+{# templates/base.html.twig #}
+<body>
+    <twig:ConsentBanner privacyPolicyUrl="https://example.com/privacy" />
+    {% block content %}{% endblock %}
+</body>
+```
+
+Equivalent: `{{ component('ConsentBanner', { privacyPolicyUrl: '…' }) }}` — tag and function syntax invoke the same Twig component.
+
+Omit `subjectKey` for anonymous visitors. See [Usage](usage.md) for props and kernel theming.
 
 ## Configure categories
 
@@ -38,7 +54,7 @@ See [Configuration](configuration.md) for storage, enforcement, and `default_sta
 
 ## Symfony integration
 
-Flex copies `config/routes/symfinity_privacy_settings.yaml` (POST `/_privacy/consent/{subjectKey}`). Manual installs: copy that file from the package into `config/routes/` or import the bundle file:
+Flex copies `config/routes/symfinity_privacy_settings.yaml`, which imports the consent submit route (and optional dev demo loader). Manual installs: copy that file from the package into `config/routes/` or import the bundle file:
 
 ```yaml
 # config/routes/symfinity_privacy_settings.yaml
@@ -103,20 +119,6 @@ public function dashboard(string $subjectKey): Response
 }
 ```
 
-## Embed ConsentBanner (Twig)
-
-Requires `symfinity/ux-blocks-form`. Suggest `symfinity/ui-kernel` when your layout already exposes `[data-theme]` tokens.
-
-```twig
-{# templates/base.html.twig #}
-{% block body %}
-    {{ component('ConsentBanner') }}
-    {% block content %}{% endblock %}
-{% endblock %}
-```
-
-Omit `subjectKey` for anonymous visitors (`visitor` + signed consent cookie). Pass an explicit key when the subject is a logged-in account.
-
 ## Gate integrations (v0.2)
 
 See **[Enforcement](enforcement.md)** for all Twig blocking methods (comparison table + examples).
@@ -154,6 +156,12 @@ See [strict-attribute-contract](contracts/strict-attribute-contract.md) for forb
 ## Headless use
 
 Skip rendering `ConsentBanner` and call capture/restore services directly — see [Usage](usage.md).
+
+## Dev smoke route (not production)
+
+`GET /_privacy/demo` is **off in `prod`** (default). It is enabled automatically in `dev` and `test` for maintainer smoke — see [Verification](verification.md).
+
+Do not enable in production unless you explicitly want a public showcase page.
 
 ## Maintainer tests (monorepo)
 

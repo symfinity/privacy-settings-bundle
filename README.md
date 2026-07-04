@@ -23,7 +23,7 @@
 
 - **Canonical attribute** — `data-privacy-category` only; rejects alternate names (`data-cookiecategory`, `data-cc`)
 - **Consent services** — capture, restore, signed cookie store (default), and store port with events
-- **ConsentBanner UI** — composes `symfinity/ux-blocks-form` roles + glue CSS; **Cookie settings** reopen
+- **ConsentBanner UI** — composes `symfinity/ux-blocks-form` roles; auto-injects tier CSS + glue (P2 OOTB); **Cookie settings** reopen
 - **Enforcement (v0.2)** — `privacy_consent()`, `PrivacyMediaEmbed`, opt-in script unblocker — [docs/enforcement.md](docs/enforcement.md)
 - **Flex recipe** — bundle registration and default four categories on install
 
@@ -42,10 +42,10 @@ See [Installation](docs/installation.md).
 ## Quick start
 
 ```twig
-{{ component('ConsentBanner') }}
+<twig:ConsentBanner />
 ```
 
-See [Quickstart](docs/quickstart.md) and [Enforcement](docs/enforcement.md).
+Tag and `{{ component('ConsentBanner') }}` are equivalent. See [Quickstart](docs/quickstart.md) and [Enforcement](docs/enforcement.md).
 
 ## Documentation
 

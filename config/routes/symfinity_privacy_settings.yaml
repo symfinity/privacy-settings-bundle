@@ -1,4 +1,6 @@
-symfinity_privacy_settings_consent_submit:
-    path: /_privacy/consent/{subjectKey}
-    controller: Symfinity\PrivacySettingsBundle\Controller\ConsentSubmitController
-    methods: [POST]
+symfinity_privacy_settings:
+    resource: '@PrivacySettingsBundle/config/routes.yaml'
+
+symfinity_privacy_settings_demo:
+    resource: .
+    type: privacy_settings_demo

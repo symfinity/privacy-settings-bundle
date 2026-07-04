@@ -28,7 +28,7 @@
 
 **Cause:** Submit and restore used different subject keys, or an old cookie was signed with a previous `policy_version`.
 
-**Fix:** Use `{{ component('ConsentBanner') }}` without `subjectKey`, or an explicit stable key (for example a user id). Clear cookies and retest. Bump `storage.cookie.policy_version` deliberately when category config changes.
+**Fix:** Use `<twig:ConsentBanner />` (or `{{ component('ConsentBanner') }}`) without `subjectKey`, or an explicit stable key (for example a user id). Clear cookies and retest. Bump `storage.cookie.policy_version` deliberately when category config changes.
 
 ## Session driver only (legacy)
 
@@ -40,7 +40,7 @@
 
 **Cause:** `symfinity/ux-blocks-form` CSS not loaded, or AssetMapper cannot resolve the bundle asset path.
 
-**Fix:** Ensure `symfinity/ux-blocks-form` Flex recipe ran (form-tier CSS). `ConsentBanner` emits the glue stylesheet link automatically; verify `debug:asset-map privacy-settings-bundle/styles/privacy-settings-consent.css` resolves. Optional `symfinity/ui-kernel` improves themed spacing and colours.
+**Fix:** Components call `privacy_settings_ui_assets()` once per request (ux-blocks core + form inline CSS). `ConsentBanner` / `PrivacyMediaEmbed` also link glue CSS automatically. Verify `id="ux-blocks-core-css"` appears in HTML. Optional `symfinity/ui-kernel` improves themed spacing and colours beyond glue fallbacks.
 
 ## Category toggle has no effect on analytics or third-party scripts
 
