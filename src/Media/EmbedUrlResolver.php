@@ -13,9 +13,6 @@ final class EmbedUrlResolver
     public const PROVIDER_GOOGLE_MAPS = 'google_maps';
     public const PROVIDER_GENERIC = 'generic';
 
-    /**
-     * @param 'youtube'|'vimeo'|'google_maps'|'generic' $provider
-     */
     public function resolve(
         string $provider,
         ?string $videoId = null,
