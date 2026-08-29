@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Privacy settings demo — symfinity/privacy-settings-bundle</title>
+    {% if headImportmap %}
+        {{ headImportmap|raw }}
+    {% endif %}
+    <style>
+        body { margin: 0; background: #0f1419; color: #e8ecf4; font-family: system-ui, sans-serif; line-height: 1.5; }
+        .privacy-demo { max-width: 42rem; margin: 2rem auto; padding: 0 1rem 4rem; }
+        .privacy-demo__lede { color: rgb(232 236 244 / 72%); }
+        .privacy-demo__section { margin-top: 2rem; }
+        .privacy-demo__hint { font-size: 0.875rem; color: rgb(232 236 244 / 72%); }
+        .privacy-demo__code { font-family: ui-monospace, monospace; font-size: 0.875rem; }
+    </style>
+</head>
+<body>
+    {{ component('ConsentBanner') }}
+
+    <main class="privacy-demo">
+        <h1>Privacy settings demo</h1>
+        <p class="privacy-demo__lede">
+            This page ships with the bundle. After Flex install, open <span class="privacy-demo__code">/_privacy/demo</span>
+            before you embed <span class="privacy-demo__code">ConsentBanner</span> in your layout.
+        </p>
+
+        <section class="privacy-demo__section" aria-labelledby="privacy-demo-media-heading">
+            <h2 id="privacy-demo-media-heading">PrivacyMediaEmbed</h2>
+            <p class="privacy-demo__hint">Enable the <strong>media</strong> category in the banner to load the player.</p>
+            <twig:PrivacyMediaEmbed
+                provider="youtube"
+                videoId="dQw4w9WgXcQ"
+                title="Privacy settings bundle demo embed"
+            />
+        </section>
+
+        <section class="privacy-demo__section" aria-labelledby="privacy-demo-analytics-heading">
+            <h2 id="privacy-demo-analytics-heading">privacy_consent()</h2>
+            <p class="privacy-demo__hint">Optional analytics snippet — visible only when the analytics category is allowed.</p>
+            {% if privacy_consent('analytics') %}
+                <p role="status">Analytics category is allowed for this visitor.</p>
+            {% else %}
+                <p role="status">Analytics category is not allowed yet.</p>
+            {% endif %}
+        </section>
+    </main>
+</body>
+</html>

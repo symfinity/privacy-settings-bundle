@@ -1,0 +1,92 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Symfinity\PrivacySettingsBundle\DependencyInjection;
+
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
+
+/**
+ * @phpstan-type PrivacySettingsConfig array{
+ *     categories: list<array{id: string, label: string, default_state: string, description?: string}>,
+ *     enforcement: array{client_scripts: bool},
+ *     demo: array{route_enabled: bool},
+ *     storage: array{
+ *         driver: 'cookie'|'session',
+ *         cookie: array{
+ *             name: string,
+ *             lifetime_days: int,
+ *             policy_version: string,
+ *             path: string,
+ *             domain: string|null,
+ *             secure: 'auto'|'true'|'false',
+ *             samesite: 'lax'|'strict'|'none',
+ *             http_only: bool,
+ *         },
+ *     },
+ * }
+ */
+final class Configuration implements ConfigurationInterface
+{
+    public function getConfigTreeBuilder(): TreeBuilder
+    {
+        $treeBuilder = new TreeBuilder('symfinity_privacy_settings');
+
+        $treeBuilder->getRootNode()
+            ->children()
+                ->arrayNode('categories')
+                    ->arrayPrototype()
+                        ->children()
+                            ->scalarNode('id')->isRequired()->cannotBeEmpty()->end()
+                            ->scalarNode('label')->isRequired()->cannotBeEmpty()->end()
+                            ->scalarNode('default_state')->defaultValue('disabled')->cannotBeEmpty()->end()
+                            ->scalarNode('description')->defaultValue('')->end()
+                        ->end()
+                    ->end()
+                    ->defaultValue([])
+                ->end()
+                ->arrayNode('storage')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->enumNode('driver')
+                            ->values(['cookie', 'session'])
+                            ->defaultValue('cookie')
+                        ->end()
+                        ->arrayNode('cookie')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->scalarNode('name')->defaultValue('symfinity_privacy_consent')->cannotBeEmpty()->end()
+                                ->integerNode('lifetime_days')->defaultValue(180)->min(180)->end()
+                                ->scalarNode('policy_version')->defaultValue('1')->cannotBeEmpty()->end()
+                                ->scalarNode('path')->defaultValue('/')->cannotBeEmpty()->end()
+                                ->scalarNode('domain')->defaultNull()->end()
+                                ->enumNode('secure')->values(['auto', 'true', 'false'])->defaultValue('auto')->end()
+                                ->enumNode('samesite')->values(['lax', 'strict', 'none'])->defaultValue('lax')->end()
+                                ->booleanNode('http_only')->defaultTrue()->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+                ->arrayNode('enforcement')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->booleanNode('client_scripts')
+                            ->defaultFalse()
+                        ->end()
+                    ->end()
+                ->end()
+                ->arrayNode('demo')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->booleanNode('route_enabled')
+                            ->defaultFalse()
+                            ->info('When true, registers GET /_privacy/demo (maintainer smoke). Default off; enable in dev/test only.')
+                        ->end()
+                    ->end()
+                ->end()
+            ->end();
+
+        return $treeBuilder;
+    }
+}
