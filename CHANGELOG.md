@@ -5,6 +5,16 @@ All notable changes to **symfinity/privacy-settings-bundle** are documented here
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.4] - 2026-11-20
+
+### Fixed
+
+- PHPUnit bootstrap registers this package's PSR-4 prefixes from `composer.json` after loading the monorepo or package autoload, and narrows the decoded autoload sections before reading `psr-4`
+
+### Notes
+
+- Dev installs require `symfinity/ui-kernel` `^0.3`. Runtime requirements, consent helpers, and the shipped config are unchanged
+
 ## [0.2.3] - 2026-07-05
 
 Patch release after [v0.2.2](https://github.com/symfinity/privacy-settings-bundle/releases/tag/v0.2.2). **P2 out-of-the-box embed** — ConsentBanner and PrivacyMediaEmbed ship styled without manual ux-blocks CSS wiring.

@@ -1,5 +1,13 @@
 # Upgrade and migration
 
+## 0.2.4 (patch)
+
+No consent API, category, or shipped config changes. Dev installs require `symfinity/ui-kernel` `^0.3`.
+
+```bash
+composer update symfinity/privacy-settings-bundle:^0.2.4
+```
+
 ## 0.2.3 (patch)
 
 P2 out-of-the-box embed — auto-injected ux-blocks CSS on `ConsentBanner` / `PrivacyMediaEmbed`, OOTB button fallbacks without ui-kernel, and optional dev/test demo route. No consent API or category config changes.
