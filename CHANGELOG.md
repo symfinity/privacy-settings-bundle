@@ -5,6 +5,16 @@ All notable changes to **symfinity/privacy-settings-bundle** are documented here
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.5] - 2026-11-20
+
+### Changed
+
+- The Stimulus path contract records that `symfinity/ui-profiler` appends `assets/controllers` and does not prepend `controller_paths`
+
+### Notes
+
+- Consent helpers, category ids, and the shipped config are unchanged
+
 ## [0.2.4] - 2026-11-20
 
 ### Fixed

@@ -1,5 +1,13 @@
 # Upgrade and migration
 
+## 0.2.5 (patch)
+
+No consent API, category, or shipped config changes. The maintainer contract for Stimulus controller paths now names the profiler copy of that pattern.
+
+```bash
+composer update symfinity/privacy-settings-bundle:^0.2.5
+```
+
 ## 0.2.4 (patch)
 
 No consent API, category, or shipped config changes. Dev installs require `symfinity/ui-kernel` `^0.3`.

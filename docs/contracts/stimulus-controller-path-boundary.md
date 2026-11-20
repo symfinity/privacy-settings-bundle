@@ -35,3 +35,7 @@ documents the contract for maintainers.
 
 Other Symfinity bundles with Stimulus controllers **SHOULD** copy this compiler-pass pattern instead of prepending
 `controller_paths`.
+
+## Copies
+
+`symfinity/ui-profiler` appends `assets/controllers` with its own `AppendStimulusControllerPathPass` when `ui_profiler.enabled` is true. It keeps every path the app configured, and the bundle default when the app configured none. It MUST NOT `prependExtensionConfig('stimulus', ['controller_paths' => …])`.
